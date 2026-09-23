@@ -55,10 +55,15 @@ bash "${ROOT_DIR}/scripts/install-gaming-stack.sh"
 echo -e "\n${YELLOW}[Passo 3/6] Aplicando Otimizacoes de Memoria ZRAM, Btrfs e PipeWire...${NC}"
 bash "${ROOT_DIR}/scripts/optimize-system.sh"
 
-# 4. Instalando Componentes Centrais do FusionOS
-echo -e "\n${YELLOW}[Passo 4/6] Registrando Utilitarios e Layouts do FusionOS...${NC}"
+# 4. Instalando Ambiente KDE Plasma 6 e Componentes Centrais
+echo -e "\n${YELLOW}[Passo 4/6] Garantindo instalação do KDE Plasma 6, SDDM e Layouts...${NC}"
+dnf install -y @kde-desktop plasma-workspace-wayland sddm || true
+systemctl enable sddm || true
+
 mkdir -p /usr/share/fusionos/layouts
+mkdir -p /usr/share/backgrounds/fusionos/
 cp -rf "${ROOT_DIR}/configs/layouts/"* /usr/share/fusionos/layouts/
+cp -f "${ROOT_DIR}/assets/fusionos-logo.svg" /usr/share/backgrounds/fusionos/logo.svg
 
 # Registra os binarios do sistema no PATH
 install -m 755 "${ROOT_DIR}/scripts/fusion-switch-layout.sh" /usr/local/bin/fusion-switch-layout
