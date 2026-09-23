@@ -1,0 +1,58 @@
+# ==============================================================================
+# FusionOS - Plymouth Boot Animation Script
+# Proposito: Centraliza o logo do FusionOS com animacao de pulsacao e barra de progresso
+# ==============================================================================
+
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+
+# Cor de fundo: Preto puro (#030712)
+Window.SetBackgroundTopColor(0.01, 0.03, 0.07);
+Window.SetBackgroundBottomColor(0.01, 0.03, 0.07);
+
+# Carrega o logo do FusionOS
+logo.original_image = Image("logo.png");
+if (logo.original_image) {
+    logo.image = logo.original_image.Scale(256, 256);
+    logo.sprite = Sprite(logo.image);
+    logo.x = (screen_width / 2) - (256 / 2);
+    logo.y = (screen_height / 2) - (256 / 2) - 40;
+    logo.sprite.SetX(logo.x);
+    logo.sprite.SetY(logo.y);
+    logo.sprite.SetOpacity(1.0);
+}
+
+# Animacao de pulsacao e progresso suave
+opacity = 0.5;
+direction = 1;
+
+fun refresh_callback() {
+    if (direction == 1) {
+        opacity += 0.02;
+        if (opacity >= 1.0) {
+            opacity = 1.0;
+            direction = -1;
+        }
+    } else {
+        opacity -= 0.02;
+        if (opacity <= 0.4) {
+            opacity = 0.4;
+            direction = 1;
+        }
+    }
+    if (logo.sprite) {
+        logo.sprite.SetOpacity(opacity);
+    }
+}
+
+Plymouth.SetRefreshFunction(refresh_callback);
+
+# Tratamento para mensagens do sistema e desligamento
+fun quit_callback() {
+    if (logo.sprite) {
+        logo.sprite.SetOpacity(0);
+    }
+}
+
+Plymouth.SetQuitFunction(quit_callback);
+

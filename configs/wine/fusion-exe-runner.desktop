@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=FusionOS Windows App Launcher
+Name[pt_BR]=Executador de Aplicativos Windows do FusionOS
+Comment=Execute programas e instaladores do Windows (.exe / .msi) com facilidade
+Comment[pt_BR]=Execute programas e instaladores do Windows (.exe / .msi) com facilidade
+Exec=/usr/local/bin/fusion-wine-handler %f
+Icon=application-x-ms-dos-executable
+Terminal=false
+MimeType=application/x-ms-dos-executable;application/x-msdownload;application/x-msi;application/vnd.microsoft.portable-executable;
+Categories=Utility;System;
+NoDisplay=false
+StartupNotify=true
+

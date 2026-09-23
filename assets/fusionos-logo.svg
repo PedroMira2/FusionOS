@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente Fundo: Profundo e Sofisticado -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+
+    <!-- Gradiente Aura / Mac Glow -->
+    <linearGradient id="fusionAura" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <!-- Gradiente Windows Modern Cyan -->
+    <linearGradient id="winGlow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Fundo com Cantos Arredondados estilo macOS App Icon -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <rect width="508" height="508" x="2" y="2" rx="110" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3" />
+
+  <!-- Geometria do Fusion 'F' Infinito Fluido -->
+  <!-- Onda Superior Mac Fluidity -->
+  <path d="M140 180 C 140 130, 200 120, 260 120 C 340 120, 380 160, 380 210 C 380 250, 340 270, 290 280 L 210 295 C 160 305, 140 330, 140 370" 
+        fill="none" 
+        stroke="url(#fusionAura)" 
+        stroke-width="38" 
+        stroke-linecap="round" 
+        filter="url(#softGlow)" />
+
+  <!-- Linha Central Fusion Windows Productivity -->
+  <path d="M140 250 L 320 250" 
+        fill="none" 
+        stroke="url(#winGlow)" 
+        stroke-width="34" 
+        stroke-linecap="round" />
+
+  <!-- Ponto de Foco Dinamico -->
+  <circle cx="380" cy="210" r="18" fill="#38bdf8" filter="url(#softGlow)" />
+  <circle cx="140" cy="370" r="16" fill="#c084fc" filter="url(#softGlow)" />
+
+  <!-- Texto FusionOS -->
+  <text x="256" y="445" 
+        text-anchor="middle" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" 
+        font-size="44" 
+        font-weight="800" 
+        letter-spacing="4" 
+        fill="#f8fafc">
+    FUSION<tspan fill="#38bdf8">OS</tspan>
+  </text>
+</svg>
+

@@ -1,0 +1,47 @@
+name: Compilar ISO FusionOS Oficial
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Permite disparar a compilação com 1 clique no GitHub
+
+jobs:
+  build-iso:
+    name: Compilar FusionOS Live ISO (Fedora 40 KDE)
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:40
+      options: --privileged # Necessário para montagem de loop devices e chroot
+
+    steps:
+      - name: Baixar Código do Repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar Ferramentas de Compilação de ISO (Lorax)
+        run: |
+          dnf install -y lorax pykickstart git
+
+      - name: Validar Sintaxe do Kickstart
+        run: |
+          ksvalidator kickstart/fusionos-fedora.ks
+
+      - name: Compilar Imagem ISO
+        run: |
+          mkdir -p output
+          livemedia-creator \
+            --ks=kickstart/fusionos-fedora.ks \
+            --no-virt \
+            --make-iso \
+            --project="FusionOS-x86_64" \
+            --releasever="40" \
+            --volid="FusionOS_Live" \
+            --iso-name="FusionOS-Live-x86_64.iso" \
+            --resultdir=output
+
+      - name: Fazer Upload da ISO Gerada (Download Disponível)
+        uses: actions/upload-artifact@v4
+        with:
+          name: FusionOS-Live-x86_64
+          path: output/FusionOS-Live-x86_64.iso
+          retention-days: 7
+

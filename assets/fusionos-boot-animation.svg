@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <style>
+      @keyframes pulseGlow {
+        0%, 100% {
+          filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4)) drop-shadow(0 0 35px rgba(192, 132, 252, 0.2));
+          opacity: 0.85;
+          transform: scale(0.98);
+        }
+        50% {
+          filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.85)) drop-shadow(0 0 70px rgba(192, 132, 252, 0.6));
+          opacity: 1;
+          transform: scale(1.02);
+        }
+      }
+
+      @keyframes spinRing {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes textFade {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+
+      .animated-logo {
+        transform-origin: 400px 380px;
+        animation: pulseGlow 3s ease-in-out infinite;
+      }
+
+      .spinner-ring {
+        transform-origin: 400px 380px;
+        animation: spinRing 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+
+      .boot-text {
+        animation: textFade 2.5s ease-in-out infinite;
+      }
+    </style>
+
+    <!-- Gradientes de Inicializacao -->
+    <linearGradient id="bootAura" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="1" />
+      <stop offset="50%" stop-color="#818cf8" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#c084fc" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo Preto Puro OLED (Estilo Boot Apple/Windows) -->
+  <rect width="800" height="800" fill="#030712" />
+
+  <!-- Anel de Progresso Fluido (Spinner de Boot) -->
+  <circle cx="400" cy="380" r="160" 
+          fill="none" 
+          stroke="url(#ringGrad)" 
+          stroke-width="4" 
+          stroke-linecap="round"
+          class="spinner-ring" />
+
+  <!-- Logo Central Animado com Pulsacao de Luz -->
+  <g class="animated-logo">
+    <!-- Onda Fluida Mac -->
+    <path d="M300 320 C 300 270, 350 260, 400 260 C 470 260, 500 300, 500 340 C 500 375, 470 395, 420 405 L 360 418 C 320 426, 300 445, 300 480" 
+          fill="none" 
+          stroke="url(#bootAura)" 
+          stroke-width="32" 
+          stroke-linecap="round" />
+
+    <!-- Barra de Produtividade Windows -->
+    <path d="M300 380 L 450 380" 
+          fill="none" 
+          stroke="#38bdf8" 
+          stroke-width="26" 
+          stroke-linecap="round" />
+
+    <!-- Orbes de Luz -->
+    <circle cx="500" cy="340" r="14" fill="#38bdf8" />
+    <circle cx="300" cy="480" r="12" fill="#c084fc" />
+  </g>
+
+  <!-- Tipografia de Inicializacao -->
+  <text x="400" y="600" 
+        text-anchor="middle" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" 
+        font-size="32" 
+        font-weight="700" 
+        letter-spacing="8" 
+        fill="#f1f5f9"
+        class="boot-text">
+    FUSION<tspan fill="#38bdf8">OS</tspan>
+  </text>
+  
+  <text x="400" y="640" 
+        text-anchor="middle" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" 
+        font-size="13" 
+        font-weight="400" 
+        letter-spacing="3" 
+        fill="#64748b">
+    INICIALIZANDO SISTEMA...
+  </text>
+</svg>
+

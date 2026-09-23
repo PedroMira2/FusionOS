@@ -1,0 +1,31 @@
+# ==============================================================================
+# FusionOS - KWin Effects & Compositor Config
+# Proposito: Entrega fluidez de animacoes nivel Mac com capacidade de snap do Windows
+# ==============================================================================
+
+[Compositing]
+AnimationSpeed=2
+Backend=OpenGL
+GLCore=true
+HiddenPreviews=5
+WindowsBlockCompositing=true
+
+[Plugins]
+blurEnabled=true
+contrastEnabled=true
+slideEnabled=false
+scaleEnabled=true
+overviewEnabled=true
+desktopgridEnabled=true
+translucencyEnabled=true
+kwin4_effect_translucencyEnabled=true
+
+[Effect-blur]
+BlurStrength=12
+NoiseStrength=0
+
+[Touchscreen]
+GestureHorizontalSwipe3=VirtualDesktopSwipe
+GestureVerticalSwipe3=Overview
+GesturePinch4=Grid
+

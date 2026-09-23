@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=FusionOS Layout Switcher
+Name[pt_BR]=Alternador de Estilo FusionOS
+Comment=Mude instantaneamente entre estilo Mac, Windows 11 e Gamer
+Comment[pt_BR]=Mude instantaneamente entre estilo Mac, Windows 11 e Gamer
+Exec=/usr/local/bin/fusion-switch-layout
+Icon=preferences-desktop-theme
+Terminal=false
+Categories=Settings;DesktopSettings;Qt;KDE;
+StartupNotify=true
+

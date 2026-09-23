@@ -1,0 +1,24 @@
+[krunner.desktop]
+_k_friendly_name=Busca Global Spotlight
+run-command=Alt+Space; Meta+Space
+
+[org.kde.dolphin.desktop]
+_k_friendly_name=Explorador de Arquivos
+_launch=Meta+E
+
+[kded6]
+_k_friendly_name=Daemon do KDE
+show-on-mouse-pos=Meta+V
+
+[kwin]
+_k_friendly_name=Gerenciador de Janelas KWin
+Overview=Meta+Tab
+Grid View=Meta+G
+Window Quick Tile Left=Meta+Left
+Window Quick Tile Right=Meta+Right
+Window Maximize=Meta+Up
+Window Minimize=Meta+Down
+Walk Through Windows=Alt+Tab
+Walk Through Windows (Reverse)=Alt+Shift+Tab
+Lock Session=Meta+L
+

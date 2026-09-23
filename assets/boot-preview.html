@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>FusionOS - Preview de Inicialização (Boot Splash)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #030712;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 20px;
+      font-size: 12px;
+      color: #475569;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <object data="fusionos-boot-animation.svg" type="image/svg+xml" width="500" height="500"></object>
+  </div>
+  <div class="hint">Preview em tempo real da tela de boot do FusionOS</div>
+</body>
+</html>
+

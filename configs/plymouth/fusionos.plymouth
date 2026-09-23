@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=FusionOS Modern Boot Splash
+Description=Tema de inicialização animado de alta resolução para o FusionOS
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/fusionos
+ScriptFile=/usr/share/plymouth/themes/fusionos/fusionos.script
+
