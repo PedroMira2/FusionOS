@@ -26,9 +26,9 @@ url --metalink="https://mirrors.fedoraproject.org/metalink?repo=fedora-41&arch=x
 repo --name=fedora --metalink="https://mirrors.fedoraproject.org/metalink?repo=fedora-41&arch=x86_64"
 repo --name=updates --metalink="https://mirrors.fedoraproject.org/metalink?repo=updates-released-f41&arch=x86_64"
 repo --name=rpmfusion-free --metalink="https://mirrors.rpmfusion.org/metalink?repo=free-fedora-41&arch=x86_64"
-repo --name=rpmfusion-free-updates --metalink="https://mirrors.rpmfusion.org/metalink?repo=free-fedora-updates-released-f41&arch=x86_64"
+repo --name=rpmfusion-free-updates --metalink="https://mirrors.rpmfusion.org/metalink?repo=free-fedora-updates-released-41&arch=x86_64"
 repo --name=rpmfusion-nonfree --metalink="https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-41&arch=x86_64"
-repo --name=rpmfusion-nonfree-updates --metalink="https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-updates-released-f41&arch=x86_64"
+repo --name=rpmfusion-nonfree-updates --metalink="https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-updates-released-41&arch=x86_64"
 
 # Selecao de Pacotes
 %packages --ignoremissing
