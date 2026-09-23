@@ -46,13 +46,18 @@ echo -e "${GREEN}✔ Kickstart válido!${NC}"
 mkdir -p "$OUTPUT_DIR"
 cd "$OUTPUT_DIR"
 
-echo -e "\n${YELLOW}Iniciando a compilação da ISO do FusionOS (isso pode levar de 15 a 30 minutos)...${NC}"
+FEDORA_VER=$(rpm -E %fedora 2>/dev/null || echo "40")
+if [[ -z "$FEDORA_VER" || "$FEDORA_VER" == "%fedora" ]]; then
+    FEDORA_VER="40"
+fi
+
+echo -e "\n${YELLOW}Iniciando a compilação da ISO do FusionOS (Fedora ${FEDORA_VER})...${NC}"
 livemedia-creator \
     --ks="$KS_FILE" \
     --no-virt \
     --make-iso \
     --project="FusionOS-x86_64" \
-    --releasever="40" \
+    --releasever="$FEDORA_VER" \
     --volid="FusionOS_Live" \
     --iso-name="FusionOS-Live-x86_64.iso"
 

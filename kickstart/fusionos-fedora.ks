@@ -14,17 +14,31 @@ firewall --enabled --service=mdns
 # Particionamento do Sistema Live
 part / --size 12288 --fstype ext4
 
-# Repositorios Oficiais do Fedora e RPM Fusion
-url --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64"
-repo --name=fedora --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-40&arch=x86_64"
-repo --name=updates --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f40&arch=x86_64"
-repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-40&arch=x86_64"
-repo --name=rpmfusion-free-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-f40&arch=x86_64"
-repo --name=rpmfusion-nonfree --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-40&arch=x86_64"
-repo --name=rpmfusion-nonfree-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-f40&arch=x86_64"
+# Repositorios Oficiais do Fedora e RPM Fusion (usando $releasever dinâmico)
+url --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
+repo --name=fedora --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
+repo --name=updates --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f$releasever&arch=x86_64"
+repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-$releasever&arch=x86_64"
+repo --name=rpmfusion-free-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-f$releasever&arch=x86_64"
+repo --name=rpmfusion-nonfree --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-$releasever&arch=x86_64"
+repo --name=rpmfusion-nonfree-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-f$releasever&arch=x86_64"
 
 # Selecao de Pacotes da Imagem
 %packages
+# 0. Bootloader, Kernel e Suporte Live Obrigatorios
+kernel
+kernel-modules
+dracut-live
+dracut-config-generic
+grub2-efi-x64
+shim-x64
+grub2-pc
+grub2-pc-modules
+grub2-tools
+grub2-tools-extra
+isolinux
+syslinux
+
 # 1. Base KDE Plasma 6
 @kde-desktop
 @multimedia
