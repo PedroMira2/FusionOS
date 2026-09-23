@@ -21,7 +21,7 @@ clearpart --all
 part / --size 12288 --fstype ext4
 
 # Repositorios Oficiais do Fedora e RPM Fusion (usando $releasever dinâmico)
-url --url="https://dl.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/x86_64/os/" --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
+url --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
 repo --name=fedora --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
 repo --name=updates --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f$releasever&arch=x86_64"
 repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-$releasever&arch=x86_64"
