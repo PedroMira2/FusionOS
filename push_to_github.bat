@@ -6,6 +6,8 @@ echo ======================================================
 echo.
 set "PATH=C:\Users\pedro\AppData\Local\Programs\MinGit\cmd;%PATH%"
 cd /d "C:\Users\pedro\Desktop\HEAK"
+git add -A
+git commit -m "Fix Kickstart repository URLs, Plymouth and Onboarding"
 git push -u origin main
 echo.
 if %ERRORLEVEL% EQU 0 (

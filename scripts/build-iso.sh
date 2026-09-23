@@ -49,10 +49,9 @@ losetup -D 2>/dev/null || true
 rm -f /run/anaconda.pid || true
 rm -rf "$OUTPUT_DIR" /var/tmp/dnf* /tmp/dnf* /tmp/lmc* || true
 
-FEDORA_VER=$(rpm -E %fedora 2>/dev/null || echo "40")
-if [[ -z "$FEDORA_VER" || "$FEDORA_VER" == "%fedora" ]]; then
-    FEDORA_VER="40"
-fi
+# Forçamos a versão 41 (estável) porque o host (Fedora 44/Rawhide) não possui 
+# repositórios estáveis liberados na pasta "releases/" do projeto Fedora.
+FEDORA_VER="41"
 
 echo -e "\n${YELLOW}Iniciando a compilação da ISO do FusionOS (Fedora ${FEDORA_VER})...${NC}"
 livemedia-creator \
@@ -63,6 +62,7 @@ livemedia-creator \
     --releasever="$FEDORA_VER" \
     --volid="FusionOS_Live" \
     --iso-name="FusionOS-Live-x86_64.iso" \
+    --extra-boot-args="quiet splash" \
     --resultdir="$OUTPUT_DIR"
 
 echo -e "\n${GREEN}✔ Compilação concluída com sucesso!${NC}"

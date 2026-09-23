@@ -18,21 +18,21 @@ bootloader --location=none
 zerombr
 clearpart --all
 
-# Particionamento do Sistema Live (11GB garante espaco de sobra para todos os pacotes e firmwares)
+# Particionamento do Sistema Live (11GB)
 part / --size 11000 --fstype ext4
 
-# Repositorios Oficiais do Fedora e RPM Fusion (usando $releasever dinâmico)
-url --url="https://dl.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/x86_64/os/"
-repo --name=fedora --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
-repo --name=updates --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f$releasever&arch=x86_64"
-repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-41&arch=x86_64"
-repo --name=rpmfusion-free-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-f41&arch=x86_64"
-repo --name=rpmfusion-nonfree --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-41&arch=x86_64"
-repo --name=rpmfusion-nonfree-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-f41&arch=x86_64"
+# Repositorios Oficiais do Fedora 41
+url --metalink="https://mirrors.fedoraproject.org/metalink?repo=fedora-41&arch=x86_64"
+repo --name=fedora --metalink="https://mirrors.fedoraproject.org/metalink?repo=fedora-41&arch=x86_64"
+repo --name=updates --metalink="https://mirrors.fedoraproject.org/metalink?repo=updates-released-f41&arch=x86_64"
+repo --name=rpmfusion-free --metalink="https://mirrors.rpmfusion.org/metalink?repo=free-fedora-41&arch=x86_64"
+repo --name=rpmfusion-free-updates --metalink="https://mirrors.rpmfusion.org/metalink?repo=free-fedora-updates-released-f41&arch=x86_64"
+repo --name=rpmfusion-nonfree --metalink="https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-41&arch=x86_64"
+repo --name=rpmfusion-nonfree-updates --metalink="https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-updates-released-f41&arch=x86_64"
 
-# Selecao de Pacotes da Imagem (--ignoremissing impede travamento se algum pacote nao for encontrado)
+# Selecao de Pacotes
 %packages --ignoremissing
-# 0. Bootloader, Kernel e Suporte Live Obrigatorios
+# 0. Base
 kernel
 kernel-modules
 dracut-live
@@ -45,12 +45,15 @@ grub2-tools
 grub2-tools-extra
 syslinux
 
-# 1. Base KDE Plasma 6
+# 1. Desktop & UI
 @kde-desktop
 @multimedia
 plasma-desktop
 plasma-workspace
 plasma-workspace-wayland
+sddm
+sddm-wayland-plasma
+sddm-kcm
 kwin
 kwin-wayland
 dolphin
@@ -59,12 +62,20 @@ krunner
 kdialog
 zenity
 
-# 2. Fontes e Renderizacao de Nivel Superior
+# 2. Branding & Live Environment
+python3-pyqt6
+python3-pip
+plymouth
+plymouth-plugin-script
+plymouth-theme-spinner
+grub2-efi-x64-cdboot
+librsvg2-tools
+calamares
+
+# 3. Audio & Fonts
 rsms-inter-fonts
 google-noto-sans-fonts
 fira-code-fonts
-
-# 3. Audio Studio-Grade e Codecs
 pipewire
 pipewire-pulseaudio
 pipewire-alsa
@@ -75,7 +86,7 @@ gstreamer1-plugins-ugly
 gstreamer1-libav
 ffmpeg
 
-# 4. Compatibilidade Gamer & Windows
+# 4. System & Compatibility
 wine
 winetricks
 steam
@@ -84,16 +95,12 @@ mangohud
 vulkan-loader
 mesa-vulkan-drivers
 mesa-va-drivers
-
-# 5. Sistema e Resiliencia
 snapper
 btrfs-assistant
 zram-generator
 flatpak
-liveusb-creator
-calamares
 
-# Remocoes para manter o sistema limpo e leve (zero bloatware)
+# Remocoes de Bloatware
 -gnome-boxes
 -kmail
 -korganizer
@@ -108,280 +115,135 @@ calamares
 -dracut-config-rescue
 %end
 
-# Configuracoes de Pos-Instalacao do Live Environment
-%post
-# 1. Habilita Flathub Oficial Completo
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-# 2. Ativa o servico de ZRAM
-systemctl enable systemd-zram-setup@zram0.service
-
-# 3. Otimizacoes de kernel de baixa latencia e jogos no Live System
-cat <<'EOF' > /etc/sysctl.d/99-fusion-performance.conf
-vm.max_map_count = 2147483642
-vm.swappiness = 10
-vm.vfs_cache_pressure = 50
-vm.dirty_background_ratio = 5
-vm.dirty_ratio = 10
-fs.file-max = 2097152
-fs.inotify.max_user_watches = 524288
-net.core.default_qdisc = cake
-net.ipv4.tcp_congestion_control = bbr
-net.ipv4.tcp_fastopen = 3
-EOF
-
-# 4. Audio de Baixa Latencia PipeWire
-mkdir -p /etc/pipewire/pipewire.conf.d/
-cat <<'EOF' > /etc/pipewire/pipewire.conf.d/99-lowlatency.conf
-context.properties = {
-    default.clock.rate          = 48000
-    default.clock.allowed-rates = [ 44100 48000 88200 96000 192000 ]
-    default.clock.quantum       = 256
-    default.clock.min-quantum   = 64
-    default.clock.max-quantum   = 1024
-}
-EOF
-
-# 5. Criando Diretorios do FusionOS
-mkdir -p /usr/share/fusionos/layouts
-mkdir -p /usr/local/bin
-
-# 6. Injetando Layouts Plasma 6 (Mac, Windows 11 e Gamer)
-cat <<'EOF' > /usr/share/fusionos/layouts/layout-macos.js
-var allPanels = panels();
-for (var i = 0; i < allPanels.length; i++) {
-    allPanels[i].remove();
-}
-var topBar = new Panel();
-topBar.location = "top";
-topBar.height = 28;
-topBar.alignment = "center";
-topBar.floating = false;
-topBar.addWidget("org.kde.plasma.kickoff");
-topBar.addWidget("org.kde.plasma.appmenu");
-topBar.addWidget("org.kde.plasma.panelspacer");
-var clock = topBar.addWidget("org.kde.plasma.digitalclock");
-clock.currentConfigGroup = ["Appearance"];
-clock.writeConfig("showDate", "true");
-clock.writeConfig("dateFormat", "shortDate");
-topBar.addWidget("org.kde.plasma.panelspacer");
-topBar.addWidget("org.kde.plasma.systemtray");
-
-var dock = new Panel();
-dock.location = "bottom";
-dock.height = 54;
-dock.alignment = "center";
-dock.floating = true;
-dock.hiding = "windowscover";
-var taskManager = dock.addWidget("org.kde.plasma.icontasks");
-taskManager.currentConfigGroup = ["General"];
-taskManager.writeConfig("launchers", [
-    "applications:org.kde.dolphin.desktop",
-    "applications:org.mozilla.firefox.desktop",
-    "applications:com.heroicgameslauncher.hgl.desktop",
-    "applications:steam.desktop",
-    "applications:org.kde.discover.desktop",
-    "applications:org.kde.konsole.desktop",
-    "applications:fusion-layout-switcher.desktop"
-]);
-dock.addWidget("org.kde.plasma.trash");
-EOF
-
-cat <<'EOF' > /usr/share/fusionos/layouts/layout-win11.js
-var allPanels = panels();
-for (var i = 0; i < allPanels.length; i++) {
-    allPanels[i].remove();
-}
-var winPanel = new Panel();
-winPanel.location = "bottom";
-winPanel.height = 44;
-winPanel.floating = true;
-winPanel.addWidget("org.kde.plasma.panelspacer");
-winPanel.addWidget("org.kde.plasma.kickoff");
-winPanel.addWidget("org.kde.plasma.krunner");
-winPanel.addWidget("org.kde.plasma.pager");
-var taskManager = winPanel.addWidget("org.kde.plasma.icontasks");
-taskManager.currentConfigGroup = ["General"];
-taskManager.writeConfig("launchers", [
-    "applications:org.kde.dolphin.desktop",
-    "applications:org.mozilla.firefox.desktop",
-    "applications:com.heroicgameslauncher.hgl.desktop",
-    "applications:steam.desktop",
-    "applications:org.kde.discover.desktop",
-    "applications:org.kde.konsole.desktop",
-    "applications:fusion-layout-switcher.desktop"
-]);
-winPanel.addWidget("org.kde.plasma.panelspacer");
-winPanel.addWidget("org.kde.plasma.systemtray");
-var clock = winPanel.addWidget("org.kde.plasma.digitalclock");
-clock.currentConfigGroup = ["Appearance"];
-clock.writeConfig("showDate", "true");
-clock.writeConfig("dateFormat", "shortDate");
-winPanel.addWidget("org.kde.plasma.showdesktop");
-EOF
-
-cat <<'EOF' > /usr/share/fusionos/layouts/layout-gamer.js
-var allPanels = panels();
-for (var i = 0; i < allPanels.length; i++) {
-    allPanels[i].remove();
-}
-var gamerDock = new Panel();
-gamerDock.location = "bottom";
-gamerDock.height = 42;
-gamerDock.alignment = "center";
-gamerDock.floating = true;
-gamerDock.hiding = "autohide";
-var taskManager = gamerDock.addWidget("org.kde.plasma.icontasks");
-taskManager.currentConfigGroup = ["General"];
-taskManager.writeConfig("launchers", [
-    "applications:com.heroicgameslauncher.hgl.desktop",
-    "applications:steam.desktop",
-    "applications:org.mozilla.firefox.desktop",
-    "applications:org.kde.dolphin.desktop",
-    "applications:fusion-layout-switcher.desktop"
-]);
-gamerDock.addWidget("org.kde.plasma.systemtray");
-EOF
-
-# 7. Injetando o Alternador de Layout
-cat <<'EOF' > /usr/local/bin/fusion-switch-layout
-#!/usr/bin/env bash
-set -euo pipefail
-SCRIPT_DIR="/usr/share/fusionos/layouts"
-TARGET_MODE="${1:-}"
-if [[ -z "$TARGET_MODE" ]]; then
-    if command -v kdialog >/dev/null 2>&1; then
-        TARGET_MODE=$(kdialog --title "FusionOS - Personalizar Layout" \
-            --radiolist "Escolha a aparencia que mais combina com seu estilo:" \
-            "macos" "Estilo Mac (Barra Superior + Dock Flutuante Translúcido)" on \
-            "win11" "Estilo Windows 11 (Barra de Tarefas Centralizada Familiar)" off \
-            "gamer" "Estilo Gamer / Foco (Ultra Imersivo com Auto-Ocultação)" off 2>/dev/null)
-    elif command -v zenity >/dev/null 2>&1; then
-        TARGET_MODE=$(zenity --list --radiolist --title="FusionOS - Personalizar Layout" \
-            --column="Selecionar" --column="ID" --column="Estilo" \
-            TRUE "macos" "Estilo Mac (Barra Superior + Dock Flutuante)" \
-            FALSE "win11" "Estilo Windows 11 (Barra Centralizada)" \
-            FALSE "gamer" "Estilo Gamer / Foco (Imersao Total)" 2>/dev/null)
-    else
-        exit 1
-    fi
-fi
-[[ -z "$TARGET_MODE" ]] && exit 0
-LAYOUT_FILE="${SCRIPT_DIR}/layout-${TARGET_MODE}.js"
-[[ ! -f "$LAYOUT_FILE" ]] && exit 1
-JS_CODE=$(cat "$LAYOUT_FILE")
-if command -v qdbus-qt6 >/dev/null 2>&1; then
-    qdbus-qt6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$JS_CODE" >/dev/null 2>&1 || true
-elif command -v qdbus >/dev/null 2>&1; then
-    qdbus org.kde.plasmashell /PlasmaShell evaluateScript "$JS_CODE" >/dev/null 2>&1 || true
-fi
-notify-send "FusionOS" "Layout alterado com sucesso!" --icon=preferences-desktop-theme 2>/dev/null || true
-EOF
-chmod +x /usr/local/bin/fusion-switch-layout
-
-# 8. Injetando o Handler de Aplicativos Windows (.exe / .msi)
-cat <<'EOF' > /usr/local/bin/fusion-wine-handler
-#!/usr/bin/env bash
-set -euo pipefail
-FILE_PATH="${1:-}"
-[[ -z "$FILE_PATH" || ! -f "$FILE_PATH" ]] && exit 1
-BASENAME=$(basename "$FILE_PATH")
-CHOICE=""
-if command -v kdialog >/dev/null 2>&1; then
-    CHOICE=$(kdialog --title "FusionOS Windows Launcher - $BASENAME" \
-        --radiolist "Como deseja executar '$BASENAME'?" \
-        1 "Executar com Wine Direto (Mais rapido e simples)" on \
-        2 "Abrir no Bottles (Ambiente isolado em container - Seguro)" off \
-        3 "Abrir no Heroic Games (Se for instalador de jogos Epic/GOG)" off 2>/dev/null)
+# Copiar arquivos do repositório host para dentro da ISO
+%post --nochroot
+echo "Sincronizando arquivos do repositorio para dentro da ISO..."
+if [ -d "/home/testes/FusionOS" ]; then
+    REPO="/home/testes/FusionOS"
+elif [ -n "$GITHUB_WORKSPACE" ]; then
+    REPO="$GITHUB_WORKSPACE"
 else
-    CHOICE="1"
+    REPO=$(pwd)
 fi
-case "$CHOICE" in
-    1|"1")
-        export WINEPREFIX="${HOME}/.wine"
-        export WINEARCH="win64"
-        wine "$FILE_PATH" &
-        ;;
-    2|"2")
-        flatpak run com.usebottles.bottles -e "$FILE_PATH" 2>/dev/null || wine "$FILE_PATH" &
-        ;;
-    3|"3")
-        flatpak run com.heroicgameslauncher.hgl 2>/dev/null || wine "$FILE_PATH" &
-        ;;
-    *)
-        exit 0
-        ;;
-esac
-EOF
-chmod +x /usr/local/bin/fusion-wine-handler
+mkdir -p $INSTALL_ROOT/usr/share/fusionos/repo
+cp -r $REPO/configs $INSTALL_ROOT/usr/share/fusionos/repo/ || true
+cp -r $REPO/assets $INSTALL_ROOT/usr/share/fusionos/repo/ || true
+cp -r $REPO/scripts $INSTALL_ROOT/usr/share/fusionos/repo/ || true
+%end
 
-# 9. Injetando Desktop Launchers
-cat <<'EOF' > /usr/share/applications/fusion-layout-switcher.desktop
-[Desktop Entry]
-Type=Application
-Name=FusionOS Layout Switcher
-Name[pt_BR]=Alternador de Estilo FusionOS
-Comment=Mude instantaneamente entre estilo Mac, Windows 11 e Gamer
-Exec=/usr/local/bin/fusion-switch-layout
-Icon=preferences-desktop-theme
-Terminal=false
-Categories=Settings;DesktopSettings;Qt;KDE;
-StartupNotify=true
-EOF
 
-cat <<'EOF' > /usr/share/applications/fusion-exe-runner.desktop
-[Desktop Entry]
-Type=Application
-Name=FusionOS Windows App Launcher
-Name[pt_BR]=Executador de Aplicativos Windows do FusionOS
-Comment=Execute programas e instaladores do Windows (.exe / .msi)
-Exec=/usr/local/bin/fusion-wine-handler %f
-Icon=application-x-ms-dos-executable
-Terminal=false
-MimeType=application/x-ms-dos-executable;application/x-msdownload;application/x-msi;
-Categories=Utility;System;
-StartupNotify=true
-EOF
-update-desktop-database /usr/share/applications || true
-
-# 10. Cria o usuario padrao Live com privilegios
+# Configuracoes Internas do Live OS
+%post
+# 1. Privilégios e Usuario Live (CRÍTICO: sudo sem senha)
 useradd -m -c "FusionOS Live User" -G wheel liveuser
 passwd -d liveuser >/dev/null
+echo "liveuser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/liveuser
+chmod 0440 /etc/sudoers.d/liveuser
 
-# 11. Habilita o login automatico no SDDM
+# 2. SDDM Autologin
+mkdir -p /etc/sddm.conf.d
 cat <<'EOF' > /etc/sddm.conf.d/autologin.conf
 [Autologin]
 User=liveuser
 Session=plasmawayland
 EOF
+systemctl enable sddm
+systemctl set-default graphical.target
 
-# 12. Pre-configura atalhos (Win+E, Win+V, Alt+Espaco) para o liveuser
-mkdir -p /home/liveuser/.config
-cat <<'EOF' > /home/liveuser/.config/kglobalshortcutsrc
-[krunner.desktop]
-_k_friendly_name=Busca Global Spotlight
-run-command=Alt+Space; Meta+Space
+# 3. Flathub
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-[org.kde.dolphin.desktop]
-_k_friendly_name=Explorador de Arquivos
-_launch=Meta+E
+# 4. Configurar Plymouth (Animação de Boot Premium)
+mkdir -p /usr/share/plymouth/themes/fusionos
+cp -r /usr/share/fusionos/repo/configs/plymouth/* /usr/share/plymouth/themes/fusionos/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/assets/fusionos-logo.svg /usr/share/plymouth/themes/fusionos/ 2>/dev/null || true
+if command -v rsvg-convert >/dev/null 2>&1; then
+    rsvg-convert -w 256 -h 256 /usr/share/fusionos/repo/assets/fusionos-logo.svg -o /usr/share/plymouth/themes/fusionos/logo.png 2>/dev/null || true
+fi
+plymouth-set-default-theme fusionos || true
 
-[kded6]
-_k_friendly_name=Daemon do KDE
-show-on-mouse-pos=Meta+V
-
-[kwin]
-_k_friendly_name=Gerenciador de Janelas KWin
-Overview=Meta+Tab
-Window Quick Tile Left=Meta+Left
-Window Quick Tile Right=Meta+Right
-Window Maximize=Meta+Up
-Window Minimize=Meta+Down
-Walk Through Windows=Alt+Tab
-Lock Session=Meta+L
+# 5. Configurar Wallpaper e Atalhos Globais
+mkdir -p /usr/share/wallpapers/FusionOS/contents/images
+cp /usr/share/fusionos/repo/assets/fusionos-logo.svg /usr/share/wallpapers/FusionOS/contents/images/1920x1080.svg 2>/dev/null || true
+cat <<'EOF' > /usr/share/wallpapers/FusionOS/metadata.desktop
+[Desktop Entry]
+Name=FusionOS Default
+X-KDE-PluginInfo-Name=FusionOS
+X-KDE-PluginInfo-Author=FusionOS Team
+X-KDE-PluginInfo-License=GPLv3
+EOF
+mkdir -p /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/
+cat <<'EOF' > /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/99-fusion-wallpaper.js
+var desktops = desktops();
+for (var i = 0; i < desktops.length; i++) {
+    desktops[i].wallpaperPlugin = "org.kde.image";
+    desktops[i].currentConfigGroup = ["Wallpaper", "org.kde.image", "General"];
+    desktops[i].writeConfig("Image", "file:///usr/share/wallpapers/FusionOS/contents/images/1920x1080.svg");
+    desktops[i].writeConfig("FillMode", "2");
+}
 EOF
 
+mkdir -p /home/liveuser/.config
+cp /usr/share/fusionos/repo/configs/kde/kglobalshortcutsrc /home/liveuser/.config/ 2>/dev/null || true
+
+# 6. Integrar Scripts do Sistema (Onboarding, Wine Handler, Layouts)
+cp /usr/share/fusionos/repo/configs/onboarding/fusion-welcome.py /usr/local/bin/ 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-welcome.py 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/wine/fusion-wine-handler.sh /usr/local/bin/fusion-wine-handler 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-wine-handler 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/scripts/fusion-switch-layout.sh /usr/local/bin/fusion-switch-layout 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-switch-layout 2>/dev/null || true
+
+mkdir -p /usr/share/fusionos/layouts
+cp -r /usr/share/fusionos/repo/configs/layouts/*.js /usr/share/fusionos/layouts/ 2>/dev/null || true
+
+mkdir -p /usr/share/applications
+cp /usr/share/fusionos/repo/configs/layouts/fusion-layout-switcher.desktop /usr/share/applications/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/wine/fusion-exe-runner.desktop /usr/share/applications/ 2>/dev/null || true
+update-desktop-database /usr/share/applications || true
+
+# 7. Criar Atalhos na Área de Trabalho do Live User
+mkdir -p /home/liveuser/Desktop
+mkdir -p /home/liveuser/.config/autostart
+
+cat <<'EOF' > /home/liveuser/Desktop/fusion-welcome.desktop
+[Desktop Entry]
+Name=Fusion OS Welcome
+Comment=Configure o seu sistema
+Exec=/usr/local/bin/fusion-welcome.py
+Icon=preferences-desktop
+Terminal=false
+Type=Application
+EOF
+
+cat <<'EOF' > /home/liveuser/Desktop/install-fusionos.desktop
+[Desktop Entry]
+Name=Instalar Fusion OS
+Comment=Instalar o sistema no disco
+Exec=sudo calamares
+Icon=drive-harddisk
+Terminal=false
+Type=Application
+EOF
+
+cp /home/liveuser/Desktop/fusion-welcome.desktop /home/liveuser/.config/autostart/
+chmod +x /home/liveuser/Desktop/*.desktop
 chown -R liveuser:liveuser /home/liveuser
 
-echo "FusionOS Kickstart Post-Install 100% Configurado!"
+# 8. Rebranding para Fusion OS
+cat <<'EOF' > /etc/os-release
+NAME="Fusion OS"
+VERSION="1.0"
+ID=fusionos
+ID_LIKE=fedora
+VERSION_ID="1.0"
+PRETTY_NAME="Fusion OS 1.0"
+ANSI_COLOR="0;38;2;60;108;231"
+LOGO=fusionos-logo
+EOF
+
+echo "FusionOS Kickstart 100% Configurado e Limpo!"
 %end

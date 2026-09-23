@@ -2,6 +2,7 @@ import sys
 import os
 import time
 import paramiko
+import getpass
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -9,7 +10,9 @@ if hasattr(sys.stdout, 'reconfigure'):
 VM_IP = "192.168.194.129"
 VM_PORT = 22
 VM_USER = "testes"
-VM_PASS = "Pedromira28@"
+VM_PASS = os.environ.get("VM_PASS")
+if not VM_PASS:
+    VM_PASS = getpass.getpass(f"Digite a senha para {VM_USER}@{VM_IP}: ")
 
 print(f"[*] Conectando a {VM_USER}@{VM_IP}...")
 ssh = paramiko.SSHClient()
