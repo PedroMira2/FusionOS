@@ -18,8 +18,8 @@ bootloader --location=none
 zerombr
 clearpart --all
 
-# Particionamento do Sistema Live
-part / --size 12288 --fstype ext4
+# Particionamento do Sistema Live (8GB suficiente para KDE e compilação rápida)
+part / --size 8192 --fstype ext4
 
 # Repositorios Oficiais do Fedora e RPM Fusion (usando $releasever dinâmico)
 url --url="https://dl.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/x86_64/os/"

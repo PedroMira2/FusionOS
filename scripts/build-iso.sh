@@ -43,8 +43,7 @@ echo -e "${YELLOW}Validando sintaxe do arquivo Kickstart...${NC}"
 ksvalidator "$KS_FILE"
 echo -e "${GREEN}✔ Kickstart válido!${NC}"
 
-mkdir -p "$OUTPUT_DIR"
-cd "$OUTPUT_DIR"
+rm -rf "$OUTPUT_DIR"
 
 FEDORA_VER=$(rpm -E %fedora 2>/dev/null || echo "40")
 if [[ -z "$FEDORA_VER" || "$FEDORA_VER" == "%fedora" ]]; then
@@ -59,7 +58,8 @@ livemedia-creator \
     --project="FusionOS-x86_64" \
     --releasever="$FEDORA_VER" \
     --volid="FusionOS_Live" \
-    --iso-name="FusionOS-Live-x86_64.iso"
+    --iso-name="FusionOS-Live-x86_64.iso" \
+    --resultdir="$OUTPUT_DIR"
 
 echo -e "\n${GREEN}✔ Compilação concluída com sucesso!${NC}"
 echo -e "${GREEN}A ISO foi gerada em: ${OUTPUT_DIR}/FusionOS-Live-x86_64.iso${NC}"
