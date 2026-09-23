@@ -43,6 +43,7 @@ echo -e "${YELLOW}Validando sintaxe do arquivo Kickstart...${NC}"
 ksvalidator "$KS_FILE"
 echo -e "${GREEN}✔ Kickstart válido!${NC}"
 
+rm -f /run/anaconda.pid || true
 rm -rf "$OUTPUT_DIR"
 
 FEDORA_VER=$(rpm -E %fedora 2>/dev/null || echo "40")
