@@ -43,8 +43,11 @@ echo -e "${YELLOW}Validando sintaxe do arquivo Kickstart...${NC}"
 ksvalidator "$KS_FILE"
 echo -e "${GREEN}✔ Kickstart válido!${NC}"
 
+killall -9 anaconda livemedia-creator 2>/dev/null || true
+umount -f /mnt/sysroot 2>/dev/null || true
+losetup -D 2>/dev/null || true
 rm -f /run/anaconda.pid || true
-rm -rf "$OUTPUT_DIR"
+rm -rf "$OUTPUT_DIR" /var/tmp/dnf* /tmp/dnf* /tmp/lmc* || true
 
 FEDORA_VER=$(rpm -E %fedora 2>/dev/null || echo "40")
 if [[ -z "$FEDORA_VER" || "$FEDORA_VER" == "%fedora" ]]; then

@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import paramiko
 
@@ -16,12 +17,28 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(VM_IP, port=VM_PORT, username=VM_USER, password=VM_PASS, timeout=15)
 print("[+] Conectado com sucesso à VM!")
 
-cmd = "cd ~/FusionOS && git fetch origin && git reset --hard origin/main && chmod +x scripts/*.sh configs/wine/*.sh && echo 'Pedromira28@' | sudo -S ./scripts/build-iso.sh"
+sftp = ssh.open_sftp()
+local_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+print(f"[*] Sincronizando kickstart e scripts locais ({local_root}) para a VM...")
+
+files_to_sync = [
+    ("kickstart/fusionos-fedora.ks", "/home/testes/FusionOS/kickstart/fusionos-fedora.ks"),
+    ("scripts/build-iso.sh", "/home/testes/FusionOS/scripts/build-iso.sh"),
+    ("scripts/fusion-setup.sh", "/home/testes/FusionOS/scripts/fusion-setup.sh"),
+]
+
+for rel_local, remote_path in files_to_sync:
+    local_path = os.path.join(local_root, rel_local.replace("/", os.sep))
+    if os.path.exists(local_path):
+        print(f"    -> Enviando {rel_local}...")
+        sftp.put(local_path, remote_path)
+sftp.close()
+
+cmd = "cd ~/FusionOS && chmod +x scripts/*.sh configs/wine/*.sh && echo 'Pedromira28@' | sudo -S ./scripts/build-iso.sh"
 print(f"[*] Executando comando na VM:\n    {cmd}\n" + "=" * 60)
 
 stdin, stdout, stderr = ssh.exec_command(cmd, get_pty=True)
 
-# Loop de leitura em tempo real
 while True:
     line = stdout.readline()
     if not line:

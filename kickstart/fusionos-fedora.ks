@@ -18,8 +18,8 @@ bootloader --location=none
 zerombr
 clearpart --all
 
-# Particionamento do Sistema Live (8GB suficiente para KDE e compilação rápida)
-part / --size 8192 --fstype ext4
+# Particionamento do Sistema Live (11GB garante espaco de sobra para todos os pacotes e firmwares)
+part / --size 11000 --fstype ext4
 
 # Repositorios Oficiais do Fedora e RPM Fusion (usando $releasever dinâmico)
 url --url="https://dl.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/x86_64/os/"
@@ -98,6 +98,14 @@ calamares
 -kmail
 -korganizer
 -kaddressbook
+-plasma-desktop-doc
+-gawk-all-langpacks
+-qcom-wwan-firmware
+-nxpwireless-firmware
+-tiwilink-firmware
+-cirrus-audio-firmware
+-mellanox-firmware
+-dracut-config-rescue
 %end
 
 # Configuracoes de Pos-Instalacao do Live Environment
