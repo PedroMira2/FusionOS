@@ -2,6 +2,9 @@ import sys
 import time
 import paramiko
 
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 VM_IP = "192.168.194.129"
 VM_PORT = 22
 VM_USER = "testes"

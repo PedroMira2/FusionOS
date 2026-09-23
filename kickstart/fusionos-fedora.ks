@@ -10,6 +10,7 @@ keyboard br-abnt2
 timezone America/Sao_Paulo --utc
 selinux --enforcing
 firewall --enabled --service=mdns
+network --bootproto=dhcp --device=link --activate
 
 # Autenticacao e Bootloader Obrigatorios
 rootpw --lock
@@ -21,7 +22,7 @@ clearpart --all
 part / --size 12288 --fstype ext4
 
 # Repositorios Oficiais do Fedora e RPM Fusion (usando $releasever dinâmico)
-url --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
+url --url="https://dl.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/x86_64/os/"
 repo --name=fedora --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
 repo --name=updates --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f$releasever&arch=x86_64"
 repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-$releasever&arch=x86_64"
