@@ -57,7 +57,7 @@ bash "${ROOT_DIR}/scripts/optimize-system.sh"
 
 # 4. Instalando Ambiente KDE Plasma 6 e Componentes Centrais
 echo -e "\n${YELLOW}[Passo 4/6] Garantindo instalação do KDE Plasma 6, SDDM e Layouts...${NC}"
-dnf install -y @kde-desktop plasma-workspace-wayland sddm || true
+dnf install -y --allowerasing --skip-unavailable @kde-desktop plasma-workspace-wayland sddm || true
 systemctl enable sddm || true
 
 mkdir -p /usr/share/fusionos/layouts

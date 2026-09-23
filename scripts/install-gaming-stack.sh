@@ -36,25 +36,25 @@ dnf config-manager --enable fedora-cisco-openh264 -y || true
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 echo -e "\n${YELLOW}[2/6] Instalando Codecs de Video/Audio e Suporte Grafico Completo...${NC}"
-dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin || true
-dnf install -y \
-    gstreamer1-plugins-{bad-\*,good-\*,base,ugly-\*} \
+dnf swap -y ffmpeg-free ffmpeg --allowerasing || true
+dnf install -y --allowerasing --skip-unavailable \
+    gstreamer1-plugins-bad-freeworld \
+    gstreamer1-plugins-ugly \
     gstreamer1-plugin-openh264 \
     gstreamer1-libav \
     ffmpeg \
     mesa-va-drivers \
-    mesa-vdpau-drivers \
     vulkan-loader \
-    vulkan-tools
+    vulkan-tools || true
 
 echo -e "\n${YELLOW}[3/6] Instalando Camada de Compatibilidade Windows (Wine, DXVK, Vulkan)...${NC}"
-dnf install -y \
+dnf install -y --allowerasing --skip-unavailable \
     wine \
     winetricks \
     gamemode \
     mangohud \
     zenity \
-    kdialog
+    kdialog || true
 
 echo -e "\n${YELLOW}[4/6] Instalando Plataformas de Jogos (Epic Games, Steam, Bottles)...${NC}"
 # Instala Steam via DNF para maxima integracao de drivers
