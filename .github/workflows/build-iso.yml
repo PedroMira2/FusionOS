@@ -17,9 +17,9 @@ jobs:
       - name: Baixar Código do Repositório
         uses: actions/checkout@v4
 
-      - name: Instalar Ferramentas de Compilação de ISO (Lorax)
+      - name: Instalar Ferramentas de Compilação de ISO (Lorax e Anaconda)
         run: |
-          dnf install -y lorax pykickstart git
+          dnf install -y lorax pykickstart anaconda anaconda-tui anaconda-live git
 
       - name: Validar Sintaxe do Kickstart
         run: |
@@ -27,7 +27,8 @@ jobs:
 
       - name: Compilar Imagem ISO
         run: |
-          mkdir -p output
+          # O Lorax exige que o diretório de destino NÃO exista previamente
+          rm -rf output
           livemedia-creator \
             --ks=kickstart/fusionos-fedora.ks \
             --no-virt \
@@ -44,4 +45,3 @@ jobs:
           name: FusionOS-Live-x86_64
           path: output/FusionOS-Live-x86_64.iso
           retention-days: 7
-
