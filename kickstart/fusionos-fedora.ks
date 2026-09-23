@@ -25,13 +25,13 @@ part / --size 8192 --fstype ext4
 url --url="https://dl.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/x86_64/os/"
 repo --name=fedora --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-$releasever&arch=x86_64"
 repo --name=updates --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f$releasever&arch=x86_64"
-repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-$releasever&arch=x86_64"
-repo --name=rpmfusion-free-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-f$releasever&arch=x86_64"
-repo --name=rpmfusion-nonfree --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-$releasever&arch=x86_64"
-repo --name=rpmfusion-nonfree-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-f$releasever&arch=x86_64"
+repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-41&arch=x86_64"
+repo --name=rpmfusion-free-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-f41&arch=x86_64"
+repo --name=rpmfusion-nonfree --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-41&arch=x86_64"
+repo --name=rpmfusion-nonfree-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-f41&arch=x86_64"
 
-# Selecao de Pacotes da Imagem
-%packages
+# Selecao de Pacotes da Imagem (--ignoremissing impede travamento se algum pacote nao for encontrado)
+%packages --ignoremissing
 # 0. Bootloader, Kernel e Suporte Live Obrigatorios
 kernel
 kernel-modules
@@ -43,7 +43,6 @@ grub2-pc
 grub2-pc-modules
 grub2-tools
 grub2-tools-extra
-isolinux
 syslinux
 
 # 1. Base KDE Plasma 6
