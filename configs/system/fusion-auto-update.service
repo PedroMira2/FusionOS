@@ -1,0 +1,15 @@
+[Unit]
+Description=FusionOS Silent Background Update Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/fusion-auto-update
+CPUSchedulingPolicy=idle
+IOSchedulingClass=idle
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

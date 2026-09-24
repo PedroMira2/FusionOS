@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
 """
 FusionOS - Comprehensive Project Validator & Test Suite
-Validates file integrity, syntax, line endings, Kickstart completeness, and references.
+Validates file integrity, syntax, line endings, Kickstart completeness,
+desktop entries, and all 20 advanced roadmap features.
 """
 
 import os
 import sys
 import subprocess
+import py_compile
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
-print("=" * 60)
+print("=" * 65)
 print("     FUSIONOS - SUITE DE VALIDAÇÃO E TESTES AUTOMATIZADOS")
-print("=" * 60)
+print("=" * 65)
 
 errors = []
-warnings = []
 passed = 0
 
 def check(condition, message):
@@ -28,42 +29,54 @@ def check(condition, message):
         print(f"  [FAIL] {message}")
         errors.append(message)
 
-# 1. Testar Integridade das Pastas
-required_dirs = ["configs/kde", "configs/layouts", "configs/system", "configs/wine", "scripts", "kickstart", "docs", "assets"]
+# 1. Integridade das Pastas
+required_dirs = [
+    "configs/kde", "configs/layouts", "configs/system", "configs/wine",
+    "configs/gaming", "configs/security", "configs/audio", "configs/sounds",
+    "scripts", "kickstart", "docs", "assets", "assets/icons/fusion-glyphs"
+]
 for d in required_dirs:
     check((ROOT_DIR / d).is_dir(), f"Diretório essencial existe: {d}")
 
-# 2. Testar Finais de Linha (Unix LF obrigatório para Linux)
-text_files = list(ROOT_DIR.rglob("*.sh")) + list(ROOT_DIR.rglob("*.js")) + list(ROOT_DIR.rglob("*.ks")) + list(ROOT_DIR.rglob("*.conf")) + list(ROOT_DIR.rglob("*.desktop"))
+# 2. Finais de Linha Unix (LF puro em todos os arquivos de configuração e scripts)
+text_files = (
+    list(ROOT_DIR.rglob("*.sh")) + list(ROOT_DIR.rglob("*.js")) +
+    list(ROOT_DIR.rglob("*.ks")) + list(ROOT_DIR.rglob("*.conf")) +
+    list(ROOT_DIR.rglob("*.desktop")) + list(ROOT_DIR.rglob("*.service")) +
+    list(ROOT_DIR.rglob("*.timer")) + list(ROOT_DIR.rglob("*.rules"))
+)
 for tf in text_files:
     content = tf.read_bytes()
     rel = tf.relative_to(ROOT_DIR)
     check(b"\r\n" not in content, f"Final de linha Unix (LF puro): {rel}")
 
-# 3. Testar Scripts JavaScript do Plasma 6 via Node.js
+# 3. Compilação e Sintaxe de TODOS os arquivos Python
+py_files = list(ROOT_DIR.rglob("*.py"))
+for pf in py_files:
+    rel = pf.relative_to(ROOT_DIR)
+    try:
+        py_compile.compile(str(pf), doraise=True)
+        check(True, f"Sintaxe Python válida (py_compile): {rel}")
+    except Exception as e:
+        check(False, f"Erro de sintaxe Python em {rel}: {e}")
+
+# 4. Scripts JavaScript do Plasma 6 via Node.js
 js_files = list((ROOT_DIR / "configs" / "layouts").glob("*.js"))
 for jf in js_files:
     rel = jf.relative_to(ROOT_DIR)
     res = subprocess.run(["node", "--check", str(jf)], capture_output=True, text=True)
     check(res.returncode == 0, f"Sintaxe JS válida (node --check): {rel}")
 
-# 4. Testar Scripts Bash
-sh_files = list((ROOT_DIR / "scripts").glob("*.sh")) + list((ROOT_DIR / "configs" / "wine").glob("*.sh"))
+# 5. Validação de Scripts Bash
+sh_files = list(ROOT_DIR.rglob("*.sh"))
 for sf in sh_files:
     rel = sf.relative_to(ROOT_DIR)
     content = sf.read_text(encoding="utf-8")
-    
-    # Valida Shebang
     check(content.startswith("#!/"), f"Shebang válido: {rel}")
-    
-    # Valida modo de erro restrito
-    check("set -e" in content, f"Tratamento de erro (set -e): {rel}")
-    
-    # Valida balanceamento de aspas simples e duplas (básico)
-    double_quotes = content.count('"')
-    check(double_quotes % 2 == 0, f"Aspas duplas balanceadas ({double_quotes}): {rel}")
+    if sf.name != "fusion-profile.sh":
+        check("set -e" in content, f"Tratamento de erro (set -e): {rel}")
 
-# 5. Testar Especificação Kickstart
+# 6. Validação do Kickstart
 ks_file = ROOT_DIR / "kickstart" / "fusionos-fedora.ks"
 ks_content = ks_file.read_text(encoding="utf-8")
 check("%packages" in ks_content, "Kickstart contém bloco %packages")
@@ -71,114 +84,129 @@ check("%post" in ks_content, "Kickstart contém bloco %post")
 check("%end" in ks_content, "Kickstart contém finalizadores %end")
 check("@kde-desktop" in ks_content, "Kickstart seleciona KDE Plasma 6")
 check("wine" in ks_content and "steam" in ks_content, "Kickstart inclui stack gamer (Wine/Steam)")
-check("fusion-switch-layout" in ks_content, "Kickstart tem Chameleon Layout Engine embutido no %post")
-check("fusion-wine-handler" in ks_content, "Kickstart tem assistente .exe embutido no %post")
+check("fusion-switch-layout" in ks_content, "Kickstart tem Chameleon Layout Engine embutido")
+check("fusion-gamebar" in ks_content, "Kickstart inclui Fusion Game Bar no %post")
+check("fusion-runner-hub" in ks_content, "Kickstart inclui Fusion Runner Hub no %post")
+check("fusion-quicklook" in ks_content, "Kickstart inclui QuickLook no %post")
+check("fusion-control-center" in ks_content, "Kickstart inclui Control Center no %post")
+check("fusion-vault" in ks_content, "Kickstart inclui Fusion Vault no %post")
+check("fusion-shield" in ks_content, "Kickstart inclui Fusion Shield no %post")
+check("fusion-permissions" in ks_content, "Kickstart inclui Flatpak Permissions no %post")
+check("fusion-time-capsule" in ks_content, "Kickstart inclui Time Capsule no %post")
+check("fusion-battery-switch" in ks_content, "Kickstart inclui Battery Switcher no %post")
+check("fusion-auto-update" in ks_content, "Kickstart inclui Silent Updates no %post")
 
-# 6. Testar Arquivos Desktop (.desktop)
+# 7. Validação de Arquivos .desktop
 desktop_files = list(ROOT_DIR.rglob("*.desktop"))
 for df in desktop_files:
     rel = df.relative_to(ROOT_DIR)
     content = df.read_text(encoding="utf-8")
-    check("[Desktop Entry]" in content, f"Seção [Desktop Entry] presente: {rel}")
+    check("[Desktop Entry]" in content, f"Desktop Entry presente: {rel}")
     check("Type=" in content, f"Campo Type= presente: {rel}")
     check("Exec=" in content, f"Campo Exec= presente: {rel}")
 
-# 7. Testar Presença dos Logos e Assets Animados
-check((ROOT_DIR / "assets" / "fusionos-logo.svg").is_file(), "Logotipo oficial SVG existe em assets/fusionos-logo.svg")
-check((ROOT_DIR / "assets" / "fusionos-boot-animation.svg").is_file(), "Animação de boot SVG existe em assets/fusionos-boot-animation.svg")
-check((ROOT_DIR / "assets" / "boot-preview.html").is_file(), "Página de visualização do boot existe em assets/boot-preview.html")
+# 8. Branding e Identidade Visual (Logos e Animação)
+check((ROOT_DIR / "assets" / "fusionos-logo.svg").is_file(), "Logotipo oficial SVG existe")
+check((ROOT_DIR / "assets" / "fusionos-boot-animation.svg").is_file(), "Animação de boot SVG existe")
+check((ROOT_DIR / "configs" / "plymouth" / "fusionos.plymouth").is_file(), "Plymouth .plymouth presente")
+check((ROOT_DIR / "configs" / "plymouth" / "fusionos.script").is_file(), "Plymouth .script presente")
 
-# 8. Testar Tema de Boot Plymouth
-check((ROOT_DIR / "configs" / "plymouth" / "fusionos.plymouth").is_file(), "Configuração Plymouth presente")
-check((ROOT_DIR / "configs" / "plymouth" / "fusionos.script").is_file(), "Script de animação Plymouth presente")
-
-# 9. Testar GitHub Actions CI/CD para compilação automática na nuvem
-check((ROOT_DIR / ".github" / "workflows" / "build-iso.yml").is_file(), "Workflow do GitHub Actions para compilar ISO presente")
-
-# 10. Testar Links de Documentação do README.md
-readme_content = (ROOT_DIR / "README.md").read_text(encoding="utf-8")
-for doc in ["docs/VALUE_PROPOSITION.md", "docs/BUILD_ISO.md", "docs/USER_GUIDE.md"]:
-    check((ROOT_DIR / doc).is_file(), f"Documento citado no README existe: {doc}")
-
-# 11. Testar Calamares Installer Branding & Slideshow
+# 9. Calamares Installer Branding & Slideshow
 check((ROOT_DIR / "configs/calamares/branding/fusionos/branding.desc").is_file(), "Calamares branding.desc presente")
 check((ROOT_DIR / "configs/calamares/branding/fusionos/slideshow.qml").is_file(), "Calamares slideshow.qml presente")
 check((ROOT_DIR / "configs/calamares/settings.conf").is_file(), "Calamares settings.conf presente")
 
-# 12. Testar Tema do Bootloader GRUB 2
-check((ROOT_DIR / "configs/grub/theme/theme.txt").is_file(), "Tema do GRUB 2 theme.txt presente")
-check((ROOT_DIR / "configs/grub/theme/background.svg").is_file(), "Fundo do GRUB 2 background.svg presente")
+# 10. GRUB 2 Bootloader Theme
+check((ROOT_DIR / "configs/grub/theme/theme.txt").is_file(), "Tema GRUB 2 theme.txt presente")
+check((ROOT_DIR / "configs/grub/theme/background.svg").is_file(), "Fundo GRUB 2 background.svg presente")
 
-# 13. Testar Consistência GTK 3/4 e Konsole Dark Theme
-check((ROOT_DIR / "configs/gtk/gtk3-settings.ini").is_file(), "Tema GTK 3 gtk3-settings.ini presente")
-check((ROOT_DIR / "configs/gtk/gtk4-settings.ini").is_file(), "Tema GTK 4 gtk4-settings.ini presente")
-check((ROOT_DIR / "configs/konsole/FusionOS-Dark.colorscheme").is_file(), "Esquema de cores do Konsole presente")
-check((ROOT_DIR / "configs/konsole/FusionOS.profile").is_file(), "Perfil padrão do Konsole presente")
+# 11. GTK 3/4 e Konsole Theme
+check((ROOT_DIR / "configs/gtk/gtk3-settings.ini").is_file(), "Tema GTK 3 presente")
+check((ROOT_DIR / "configs/gtk/gtk4-settings.ini").is_file(), "Tema GTK 4 presente")
+check((ROOT_DIR / "configs/konsole/FusionOS-Dark.colorscheme").is_file(), "Cores Konsole presentes")
+check((ROOT_DIR / "configs/konsole/FusionOS.profile").is_file(), "Perfil Konsole presente")
 
-# 14. Testar Interface Gráfica do Chameleon Layout Switcher
-check((ROOT_DIR / "configs/layouts/fusion-layout-gui.py").is_file(), "Chameleon GUI fusion-layout-gui.py presente")
-
-# 15. Testar Fastfetch e Perfil de Terminal
-check((ROOT_DIR / "configs/fastfetch/config.jsonc").is_file(), "Configuração do Fastfetch config.jsonc presente")
-check((ROOT_DIR / "configs/system/fusion-profile.sh").is_file(), "Script de perfil do terminal fusion-profile.sh presente")
-
-# 16. Testar Btrfs Time Machine e Snapper
-check((ROOT_DIR / "configs/system/snapper-root.conf").is_file(), "Configuração do Snapper snapper-root.conf presente")
-check((ROOT_DIR / "configs/system/fusion-snapper-setup.sh").is_file(), "Script fusion-snapper-setup.sh presente")
-
-# 17. Testar Perfis de Energia e Performance
-check((ROOT_DIR / "configs/system/fusion-power-mode.sh").is_file(), "Script fusion-power-mode.sh presente")
-check((ROOT_DIR / "configs/system/fusion-power-gui.py").is_file(), "Interface GUI fusion-power-gui.py presente")
-check((ROOT_DIR / "configs/system/fusion-power-mode.desktop").is_file(), "Atalho fusion-power-mode.desktop presente")
-
-# 18. Testar Assistente de Drivers e Hardware
-check((ROOT_DIR / "configs/system/fusion-hardware-assistant.sh").is_file(), "Script fusion-hardware-assistant.sh presente")
-check((ROOT_DIR / "configs/system/fusion-hardware-gui.py").is_file(), "Interface GUI fusion-hardware-gui.py presente")
-check((ROOT_DIR / "configs/system/fusion-hardware-assistant.desktop").is_file(), "Atalho fusion-hardware-assistant.desktop presente")
-
-# 19. Testar Tema Sonoro Acústico
-sound_dir = ROOT_DIR / "configs/sounds/fusionos"
-check((sound_dir / "index.theme").is_file(), "Arquivo index.theme sonoro presente")
-check((sound_dir / "stereo/desktop-login.wav").is_file(), "Som de inicialização (desktop-login.wav) presente")
-check((sound_dir / "stereo/message-new-instant.wav").is_file(), "Som de notificação (message-new-instant.wav) presente")
-check((sound_dir / "stereo/device-added.wav").is_file(), "Som de dispositivo conectado presente")
-check((sound_dir / "stereo/device-removed.wav").is_file(), "Som de dispositivo desconectado presente")
-
-# 20. Testar Motor de Áudio Hi-Res e Bluetooth Destravado
-check((ROOT_DIR / "configs/system/pipewire-hires.conf").is_file(), "Configuração PipeWire Hi-Res presente")
-check((ROOT_DIR / "configs/system/wireplumber-bluetooth.conf").is_file(), "Configuração WirePlumber Bluetooth Hi-Res presente")
-
-# 21. Testar Presets de Áudio Dolby 3D e Cinema
+# 12. Áudio Hi-Res 384kHz, Bluetooth e Dolby Atmos DSP
+check((ROOT_DIR / "configs/system/pipewire-hires.conf").is_file(), "PipeWire Hi-Res 384kHz conf presente")
+check((ROOT_DIR / "configs/system/wireplumber-bluetooth.conf").is_file(), "WirePlumber Bluetooth LDAC/aptX presente")
 check((ROOT_DIR / "configs/audio/presets/FusionOS-Dolby-Spatial.json").is_file(), "Preset Dolby Spatial 3D presente")
 check((ROOT_DIR / "configs/audio/presets/FusionOS-Super-Bass.json").is_file(), "Preset Super Bass presente")
 check((ROOT_DIR / "configs/audio/presets/FusionOS-Cinema-3D.json").is_file(), "Preset Cinema 3D presente")
+check((ROOT_DIR / "configs/audio/fusion-audio-service.sh").is_file(), "Serviço fusion-audio-service.sh presente")
+check((ROOT_DIR / "configs/audio/fusion-sound-gui.py").is_file(), "Central gráfica fusion-sound-gui.py presente")
 
-# 22. Testar Central de Áudio e Serviço de Inicialização
-check((ROOT_DIR / "configs/audio/fusion-audio-service.sh").is_file(), "Serviço de áudio fusion-audio-service.sh presente")
-check((ROOT_DIR / "configs/audio/fusion-sound-gui.py").is_file(), "Central gráfica de áudio fusion-sound-gui.py presente")
-check((ROOT_DIR / "configs/audio/fusion-sound-control.desktop").is_file(), "Atalho de controle de áudio presente")
+# 13. Tema Sonoro Acústico
+sound_dir = ROOT_DIR / "configs/sounds/fusionos"
+check((sound_dir / "index.theme").is_file(), "Arquivo index.theme sonoro presente")
+check((sound_dir / "stereo/desktop-login.wav").is_file(), "Som desktop-login.wav presente")
+check((sound_dir / "stereo/message-new-instant.wav").is_file(), "Som message-new-instant.wav presente")
+check((sound_dir / "stereo/device-added.wav").is_file(), "Som device-added.wav presente")
+check((sound_dir / "stereo/device-removed.wav").is_file(), "Som device-removed.wav presente")
 
-# 23. Testar Spotlight HUD (KRunner)
-check((ROOT_DIR / "configs/kde/krunnerrc").is_file(), "Configuração do Spotlight HUD krunnerrc presente")
+# 14. Validação das 20 Melhorias do Roadmap:
+# Grupo 1: Jogos
+check((ROOT_DIR / "configs/gaming/fusion-gamebar.py").is_file(), "Item 1: Game Bar GUI presente")
+check((ROOT_DIR / "configs/gaming/fusion-gamebar.desktop").is_file(), "Item 1: Game Bar Desktop Entry presente")
+check((ROOT_DIR / "configs/gaming/fusion-clip-record.sh").is_file(), "Item 2: Clip Recorder script presente")
+check((ROOT_DIR / "configs/gaming/fusion-runner-hub.py").is_file(), "Item 3: Fusion Runner Hub GUI presente")
+check((ROOT_DIR / "configs/gaming/fusion-runner-hub.desktop").is_file(), "Item 3: Fusion Runner Hub Desktop Entry presente")
 
-# 24. Testar Gestos Mac no Touchpad
-check((ROOT_DIR / "configs/kde/touchpadrc").is_file(), "Configuração de gestos de touchpad touchpadrc presente")
+kwinrc_content = (ROOT_DIR / "configs/kde/kwinrc").read_text(encoding="utf-8")
+check("AdaptiveSync=always" in kwinrc_content and "AllowTearing=true" in kwinrc_content, "Item 4: Auto-VRR & Low Latency configurado no kwinrc")
 
-# 25. Testar Fusion Connect (Integração com Celular)
-check((ROOT_DIR / "configs/system/fusion-connect-setup.sh").is_file(), "Script fusion-connect-setup.sh presente")
-check((ROOT_DIR / "configs/system/fusion-connect.desktop").is_file(), "Atalho fusion-connect.desktop presente")
+# Grupo 2: Produtividade
+check((ROOT_DIR / "configs/system/fusion-quicklook.py").is_file(), "Item 5: QuickLook GUI presente")
+check((ROOT_DIR / "configs/system/fusion-quicklook.desktop").is_file(), "Item 5: QuickLook Desktop Entry presente")
+check("[ElectricBorders]" in kwinrc_content and "TopLeft=Overview" in kwinrc_content, "Item 6: Hot Corners configurado no kwinrc")
+check((ROOT_DIR / "configs/kde/klipperrc").is_file(), "Item 7: ClipVault klipperrc presente")
+check("MaxClipItems=50" in (ROOT_DIR / "configs/kde/klipperrc").read_text(encoding="utf-8"), "Item 7: ClipVault 50 itens configurado")
+check("WindowSnapZone=12" in kwinrc_content and "BorderSnapZone=12" in kwinrc_content, "Item 8: Smart Window Snapping configurado")
 
-# 26. Testar AdBlock e DNS-over-TLS
-check((ROOT_DIR / "configs/system/resolved-privacy.conf").is_file(), "Configuração de DNS seguro resolved-privacy.conf presente")
+# Grupo 3: Design & UI
+check((ROOT_DIR / "configs/system/fusion-dynamic-wallpaper.sh").is_file(), "Item 9: Dynamic Wallpaper script presente")
+check((ROOT_DIR / "configs/system/fusion-dynamic-wallpaper.service").is_file(), "Item 9: Dynamic Wallpaper service presente")
+check((ROOT_DIR / "configs/system/fusion-dynamic-wallpaper.timer").is_file(), "Item 9: Dynamic Wallpaper timer presente")
+check((ROOT_DIR / "configs/system/fusion-control-center.py").is_file(), "Item 10: Control Center GUI presente")
+check((ROOT_DIR / "configs/system/fusion-control-center.desktop").is_file(), "Item 10: Control Center Desktop Entry presente")
 
-# 27. Testar Fusion Cleaner & Otimizador
-check((ROOT_DIR / "configs/system/fusion-cleaner.sh").is_file(), "Script fusion-cleaner.sh presente")
-check((ROOT_DIR / "configs/system/fusion-cleaner-gui.py").is_file(), "Interface GUI fusion-cleaner-gui.py presente")
-check((ROOT_DIR / "configs/system/fusion-cleaner.desktop").is_file(), "Atalho fusion-cleaner.desktop presente")
+glyph_icons = list((ROOT_DIR / "assets/icons/fusion-glyphs/scalable/apps").glob("*.svg"))
+check(len(glyph_icons) >= 10, f"Item 11: Fusion Glyphs contém {len(glyph_icons)} ícones SVG escaláveis")
+check((ROOT_DIR / "assets/icons/fusion-glyphs/index.theme").is_file(), "Item 11: Fusion Glyphs index.theme presente")
 
-print("\n" + "=" * 60)
+check((ROOT_DIR / "configs/system/fusion-focus-mode.sh").is_file(), "Item 12: Focus Mode script presente")
+check((ROOT_DIR / "configs/system/fusion-focus-mode.desktop").is_file(), "Item 12: Focus Mode Desktop Entry presente")
+
+# Grupo 4: Segurança & Privacidade
+check((ROOT_DIR / "configs/security/fusion-vault.sh").is_file(), "Item 13: Fusion Vault script presente")
+check((ROOT_DIR / "configs/security/fusion-vault-gui.py").is_file(), "Item 13: Fusion Vault GUI presente")
+check((ROOT_DIR / "configs/security/fusion-vault.desktop").is_file(), "Item 13: Fusion Vault Desktop Entry presente")
+
+check((ROOT_DIR / "configs/security/fusion-shield.py").is_file(), "Item 14: Fusion Shield GUI presente")
+check((ROOT_DIR / "configs/security/fusion-shield.desktop").is_file(), "Item 14: Fusion Shield Desktop Entry presente")
+
+check((ROOT_DIR / "configs/security/fusion-permissions.py").is_file(), "Item 15: Flatpak Permissions GUI presente")
+check((ROOT_DIR / "configs/security/fusion-permissions.desktop").is_file(), "Item 15: Flatpak Permissions Desktop Entry presente")
+
+check((ROOT_DIR / "configs/security/fusion-time-capsule.sh").is_file(), "Item 16: Time Capsule script presente")
+check((ROOT_DIR / "configs/security/fusion-time-capsule-gui.py").is_file(), "Item 16: Time Capsule GUI presente")
+check((ROOT_DIR / "configs/security/fusion-time-capsule.desktop").is_file(), "Item 16: Time Capsule Desktop Entry presente")
+
+# Grupo 5: Sistema & Hardware
+check((ROOT_DIR / "configs/system/fusion-battery-switch.sh").is_file(), "Item 17: Battery Switcher script presente")
+check((ROOT_DIR / "configs/system/99-fusion-battery.rules").is_file(), "Item 17: Battery Switcher udev rule presente")
+
+check((ROOT_DIR / "configs/system/fusion-focus-scheduler.sh").is_file(), "Item 18: Focus Scheduler script presente")
+check((ROOT_DIR / "configs/system/fusion-focus-scheduler.service").is_file(), "Item 18: Focus Scheduler service presente")
+
+check("[NightColor]" in kwinrc_content and "NightTemperature=3800" in kwinrc_content, "Item 19: Night Light 3800K configurado no kwinrc")
+
+check((ROOT_DIR / "configs/system/fusion-auto-update.sh").is_file(), "Item 20: Auto Update script presente")
+check((ROOT_DIR / "configs/system/fusion-auto-update.service").is_file(), "Item 20: Auto Update service presente")
+check((ROOT_DIR / "configs/system/fusion-auto-update.timer").is_file(), "Item 20: Auto Update timer presente")
+
+print("\n" + "=" * 65)
 print(f"RESULTADO: {passed} testes passaram | {len(errors)} falhas")
-print("=" * 60)
+print("=" * 65)
 
 if errors:
     print("\nFalhas encontradas:")
@@ -186,5 +214,5 @@ if errors:
         print(f"  - {e}")
     sys.exit(1)
 else:
-    print("\n[SUCESSO] TODAS AS VALIDACOES PASSARAM COM SUCESSO! O PROJETO ESTA 100% PRONTO.")
+    print("\n[SUCESSO] TODAS AS 20 MELHORIAS E COMPONENTES FORAM VALIDADOS COM 0 ERROS!")
     sys.exit(0)

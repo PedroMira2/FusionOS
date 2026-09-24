@@ -1,10 +1,13 @@
 [Compositing]
+AdaptiveSync=always
+AllowTearing=true
 AnimationSpeed=2
 Backend=OpenGL
 Enabled=true
 GLCore=true
 GLPreferBufferSwap=a
 GLTextureFilter=2
+LatencyPolicy=ExtremelyLow
 OpenGLIsUnsafe=false
 WindowsBlockCompositing=true
 
@@ -15,27 +18,52 @@ NoiseStrength=5
 [Effect-overview]
 LayoutMode=0
 
+[ElectricBorders]
+BottomLeft=ApplicationLauncher
+BottomRight=LockScreen
+TopLeft=Overview
+TopRight=ShowDesktop
+
+[NightColor]
+Active=true
+DayTemperature=6500
+LatitudeAuto=0
+LongitudeAuto=0
+Mode=Location
+NightTemperature=3800
+TransitionTime=30
+
 [Plugins]
 blurEnabled=true
 fadeEnabled=true
-slideEnabled=true
-zoomEnabled=false
-wobblyWindowsEnabled=false
-magicLampEnabled=false
 kscreen-4Enabled=true
+kwin4_effect_geometry_changeEnabled=true
+magicLampEnabled=false
+slideEnabled=true
+windowviewEnabled=true
+wobblyWindowsEnabled=false
+zoomEnabled=false
 
 [TabBox]
 DesktopLayout=thumbnail_grid
 DesktopListLayout=thumbnail_grid
 LayoutName=breeze_dark
 
+[Wayland]
+AllowTearingInMaximizedAndFullscreen=true
+VirtualDesktopNavigationGestures=true
+
 [Windows]
+BorderSnapZone=12
 BorderlessMaximizedWindows=true
 CenterSnapZone=100
+CornerBarrier=true
+ElectricBorderCooldown=300
+ElectricBorderCornerRatio=0.15
+ElectricBorderDelay=150
 ElectricBorders=1
+SnapOnlyWhenOverlapping=false
+WindowSnapZone=12
 
 [Xwayland]
 XwaylandCrashPolicy=Stop
-
-[Wayland]
-VirtualDesktopNavigationGestures=true

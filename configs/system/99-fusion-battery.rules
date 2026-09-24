@@ -1,0 +1,3 @@
+# FusionOS Intelligent Battery Switcher udev rule
+SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="/usr/bin/fusion-battery-switch battery"
+SUBSYSTEM=="power_supply", ATTR{online}=="1", RUN+="/usr/bin/fusion-battery-switch ac"

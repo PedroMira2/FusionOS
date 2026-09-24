@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Fusion Game Bar
+Name[pt_BR]=Barra de Jogos FusionOS
+Comment=Overlay de FPS, gravação e métricas de desempenho para jogos
+Comment[pt_BR]=Overlay de FPS, gravação e métricas de desempenho para jogos
+Exec=/usr/local/bin/fusion-gamebar.py
+Icon=applications-games
+Terminal=false
+Categories=Game;Settings;Utility;
+StartupNotify=true

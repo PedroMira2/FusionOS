@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Time Capsule
+Comment=Sistema de Backup Incremental e Restauração do FusionOS
+Exec=/usr/bin/fusion-time-capsule-gui
+Icon=document-save
+Terminal=false
+Type=Application
+Categories=Utility;Archiving;System;
+Keywords=backup;restore;snapshot;time capsule;btrfs;rsync;
+StartupNotify=true

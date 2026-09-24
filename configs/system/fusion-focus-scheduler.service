@@ -1,0 +1,14 @@
+[Unit]
+Description=FusionOS Window Focus CPU Priority Scheduler
+After=plasma-workspace.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/fusion-focus-scheduler
+Restart=always
+RestartSec=5
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=default.target

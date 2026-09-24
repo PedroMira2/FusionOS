@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Runner Hub
+Comment=Gerenciador de GE-Proton, Wine e DXVK do FusionOS
+Exec=/usr/bin/fusion-runner-hub
+Icon=applications-games
+Terminal=false
+Type=Application
+Categories=Game;Settings;System;
+Keywords=proton;wine;ge-proton;gaming;runners;dxvk;
+StartupNotify=true

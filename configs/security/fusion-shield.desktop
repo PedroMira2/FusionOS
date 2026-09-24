@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Shield
+Comment=Firewall Gráfico e Proteção de Rede do FusionOS
+Exec=/usr/bin/fusion-shield
+Icon=security-high
+Terminal=false
+Type=Application
+Categories=Security;Settings;System;
+Keywords=firewall;shield;security;network;stealth;panic;
+StartupNotify=true

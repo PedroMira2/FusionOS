@@ -147,6 +147,10 @@ pipewire-codec-aptx
 libfreeaptx
 kde-connect
 kde-connect-libs
+brightnessctl
+wf-recorder
+rsync
+gocryptfs
 %end
 
 
@@ -563,7 +567,96 @@ chmod +x /usr/local/bin/fusion-cleaner-gui.py 2>/dev/null || true
 cp /usr/share/fusionos/repo/configs/system/fusion-cleaner.desktop /usr/share/applications/ 2>/dev/null || true
 
 # ==================================================================
-# 25. Rebranding OS (Zero Fedora)
+# 25. Gaming Suite (Game Bar, Clip Recorder, Runner Hub)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/gaming/fusion-gamebar.py /usr/local/bin/fusion-gamebar 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-gamebar 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/gaming/fusion-clip-record.sh /usr/local/bin/fusion-clip-record 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-clip-record 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/gaming/fusion-runner-hub.py /usr/local/bin/fusion-runner-hub 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-runner-hub 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/gaming/*.desktop /usr/share/applications/ 2>/dev/null || true
+
+# ==================================================================
+# 26. Produtividade (QuickLook & ClipVault)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/system/fusion-quicklook.py /usr/local/bin/fusion-quicklook 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-quicklook 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-quicklook.desktop /usr/share/applications/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/kde/klipperrc $LIVE_HOME/.config/klipperrc 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/kde/klipperrc /etc/skel/.config/klipperrc 2>/dev/null || true
+
+# ==================================================================
+# 27. Design & UI (Dynamic Wallpaper, Control Center, Focus Mode, Glyphs)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/system/fusion-dynamic-wallpaper.sh /usr/local/bin/fusion-dynamic-wallpaper 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-dynamic-wallpaper 2>/dev/null || true
+mkdir -p /etc/systemd/user
+cp /usr/share/fusionos/repo/configs/system/fusion-dynamic-wallpaper.service /etc/systemd/user/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-dynamic-wallpaper.timer /etc/systemd/user/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-control-center.py /usr/local/bin/fusion-control-center 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-control-center 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-control-center.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-focus-mode.sh /usr/local/bin/fusion-focus-mode 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-focus-mode 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-focus-mode.desktop /usr/share/applications/ 2>/dev/null || true
+
+mkdir -p /usr/share/icons/fusion-glyphs
+cp -r /usr/share/fusionos/repo/assets/icons/fusion-glyphs/* /usr/share/icons/fusion-glyphs/ 2>/dev/null || true
+gtk-update-icon-cache /usr/share/icons/fusion-glyphs 2>/dev/null || true
+
+# ==================================================================
+# 28. Seguranca & Privacidade (Vault, Shield, Permissions, Time Capsule)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/security/fusion-vault.sh /usr/local/bin/fusion-vault 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-vault 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/security/fusion-vault-gui.py /usr/local/bin/fusion-vault-gui 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-vault-gui 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/security/fusion-vault.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/security/fusion-shield.py /usr/local/bin/fusion-shield 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-shield 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/security/fusion-shield.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/security/fusion-permissions.py /usr/local/bin/fusion-permissions 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-permissions 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/security/fusion-permissions.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/security/fusion-time-capsule.sh /usr/local/bin/fusion-time-capsule 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-time-capsule 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/security/fusion-time-capsule-gui.py /usr/local/bin/fusion-time-capsule-gui 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-time-capsule-gui 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/security/fusion-time-capsule.desktop /usr/share/applications/ 2>/dev/null || true
+
+# ==================================================================
+# 29. Hardware & Otimizacoes de Fundo (Battery Switcher, Scheduler, Updates)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/system/fusion-battery-switch.sh /usr/local/bin/fusion-battery-switch 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-battery-switch 2>/dev/null || true
+mkdir -p /etc/udev/rules.d
+cp /usr/share/fusionos/repo/configs/system/99-fusion-battery.rules /etc/udev/rules.d/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-focus-scheduler.sh /usr/local/bin/fusion-focus-scheduler 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-focus-scheduler 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-focus-scheduler.service /etc/systemd/user/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-auto-update.sh /usr/local/bin/fusion-auto-update 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-auto-update 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-auto-update.service /etc/systemd/system/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-auto-update.timer /etc/systemd/system/ 2>/dev/null || true
+systemctl enable fusion-auto-update.timer 2>/dev/null || true
+
+# Garantir symlinks universais em /usr/bin/ para todos os binarios em /usr/local/bin/
+for bin in /usr/local/bin/fusion-*; do
+    if [ -x "$bin" ]; then
+        ln -sf "$bin" "/usr/bin/$(basename "$bin")" 2>/dev/null || true
+    fi
+done
+
+# ==================================================================
+# 30. Rebranding OS (Zero Fedora)
 # ==================================================================
 cat <<'EOF' > /etc/os-release
 NAME="FusionOS"

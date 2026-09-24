@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Fusion QuickLook
+Comment=Pré-visualização instantânea de arquivos estilo macOS
+Exec=/usr/bin/fusion-quicklook %f
+Icon=document-preview
+Terminal=false
+Type=Application
+Categories=Utility;System;
+MimeType=image/png;image/jpeg;image/svg+xml;text/plain;text/x-python;text/markdown;audio/mpeg;audio/wav;audio/flac;inode/directory;
+NoDisplay=true
+StartupNotify=false

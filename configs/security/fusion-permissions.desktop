@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion App Shield
+Comment=Gerenciador de Privacidade e Permissões de Aplicativos do FusionOS
+Exec=/usr/bin/fusion-permissions
+Icon=security-medium
+Terminal=false
+Type=Application
+Categories=Security;Settings;System;
+Keywords=permissions;flatpak;privacy;network;camera;mic;
+StartupNotify=true

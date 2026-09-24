@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Modo Foco
+Comment=Alternar Não Perturbe e silenciamento de notificações
+Exec=/usr/bin/fusion-focus-mode toggle
+Icon=preferences-desktop-notification-bell
+Terminal=false
+Type=Application
+Categories=Utility;Settings;
+Keywords=focus;dnd;notifications;quiet;
+StartupNotify=false

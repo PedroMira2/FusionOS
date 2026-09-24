@@ -1,0 +1,12 @@
+[Icon Theme]
+Name=Fusion Glyphs
+Comment=Tema de ícones premium e minimalista exclusivo do FusionOS
+Inherits=breeze-dark,hicolor
+Directories=scalable/apps
+
+[scalable/apps]
+Size=48
+Type=Scalable
+MinSize=16
+MaxSize=512
+Context=Applications

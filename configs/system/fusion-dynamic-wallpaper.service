@@ -1,0 +1,12 @@
+[Unit]
+Description=FusionOS Dynamic Wallpaper Engine Service
+After=plasma-workspace.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/fusion-dynamic-wallpaper auto
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=default.target

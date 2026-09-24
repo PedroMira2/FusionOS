@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Vault
+Comment=Pasta privada e segura com criptografia de ponta a ponta
+Exec=/usr/bin/fusion-vault-gui
+Icon=security-high
+Terminal=false
+Type=Application
+Categories=Utility;Security;System;
+Keywords=vault;encrypt;crypt;private;password;security;
+StartupNotify=true

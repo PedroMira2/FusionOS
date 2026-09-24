@@ -1,0 +1,11 @@
+[Unit]
+Description=FusionOS Dynamic Wallpaper Periodic Check Timer
+After=plasma-workspace.target
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

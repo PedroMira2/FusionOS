@@ -1,24 +1,34 @@
 [krunner.desktop]
 _k_friendly_name=Busca Global Spotlight
-run-command=Alt+Space; Meta+Space
+run-command=Alt+Space
+
+[fusion-gamebar.desktop]
+_k_friendly_name=Fusion Game Bar
+_launch=Meta+G
+
+[fusion-control-center.desktop]
+_k_friendly_name=Fusion Control Center
+_launch=Meta+A
 
 [org.kde.dolphin.desktop]
 _k_friendly_name=Explorador de Arquivos
 _launch=Meta+E
 
 [kded6]
-_k_friendly_name=Daemon do KDE
+_k_friendly_name=Daemon do KDE (ClipVault)
 show-on-mouse-pos=Meta+V
 
 [kwin]
 _k_friendly_name=Gerenciador de Janelas KWin
 Overview=Meta+Tab
-Grid View=Meta+G
+Grid View=Meta+Ctrl+G
 Window Quick Tile Left=Meta+Left
 Window Quick Tile Right=Meta+Right
 Window Maximize=Meta+Up
 Window Minimize=Meta+Down
+Window Quick Tile Top Left=Meta+Alt+Left
+Window Quick Tile Top Right=Meta+Alt+Right
 Walk Through Windows=Alt+Tab
 Walk Through Windows (Reverse)=Alt+Shift+Tab
 Lock Session=Meta+L
-
+Show Desktop=Meta+D

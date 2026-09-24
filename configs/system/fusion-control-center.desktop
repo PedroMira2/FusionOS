@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Control Center
+Comment=Central de Controle Unificada do FusionOS
+Exec=/usr/bin/fusion-control-center
+Icon=preferences-system
+Terminal=false
+Type=Application
+Categories=Settings;System;Utility;
+Keywords=settings;control;wifi;bluetooth;volume;brightness;power;
+StartupNotify=false

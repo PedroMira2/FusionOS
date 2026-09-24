@@ -1,0 +1,12 @@
+[Unit]
+Description=FusionOS Silent Background Update Timer
+After=network-online.target
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=6h
+Persistent=true
+RandomizedDelaySec=15min
+
+[Install]
+WantedBy=timers.target
