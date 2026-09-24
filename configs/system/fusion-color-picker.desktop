@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Color Picker
+Comment=Seletor de cores e conta-gotas global com lupa de precisão
+Exec=/usr/bin/fusion-color-picker
+Icon=color-picker
+Terminal=false
+Type=Application
+Categories=Utility;Graphics;Development;
+Keywords=color;picker;eyedropper;palette;hex;rgb;
+StartupNotify=false

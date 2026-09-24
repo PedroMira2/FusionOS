@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Cast
+Comment=Transmissão de tela e áudio sem fios para Smart TVs e Chromecast
+Exec=/usr/bin/fusion-cast
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Network;AudioVideo;Utility;
+Keywords=cast;chromecast;miracast;airplay;stream;screen;mirror;
+StartupNotify=true

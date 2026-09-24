@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion HDR & OLED Studio
+Comment=Calibração de High Dynamic Range e proteção para painéis OLED
+Exec=/usr/bin/fusion-hdr-assistant
+Icon=video-display
+Terminal=false
+Type=Application
+Categories=Settings;HardwareSettings;Graphics;
+Keywords=hdr;oled;display;color;brightness;nits;
+StartupNotify=true

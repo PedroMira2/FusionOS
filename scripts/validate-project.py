@@ -204,6 +204,41 @@ check((ROOT_DIR / "configs/system/fusion-auto-update.sh").is_file(), "Item 20: A
 check((ROOT_DIR / "configs/system/fusion-auto-update.service").is_file(), "Item 20: Auto Update service presente")
 check((ROOT_DIR / "configs/system/fusion-auto-update.timer").is_file(), "Item 20: Auto Update timer presente")
 
+# Grupo 6: Pro Suite (Flagship Additions)
+check((ROOT_DIR / "configs/audio/fusion-crisp-mic.sh").is_file(), "Pro 1: Crisp Mic script presente")
+check((ROOT_DIR / "configs/audio/pipewire-crisp-mic.conf").is_file(), "Pro 1: Crisp Mic PipeWire conf presente")
+autoeq_profiles = list((ROOT_DIR / "configs/audio/eq-profiles").glob("*.json"))
+check(len(autoeq_profiles) >= 6, f"Pro 2: AutoEQ contém {len(autoeq_profiles)} perfis de fones de ouvido")
+
+check((ROOT_DIR / "configs/system/fusion-lens.py").is_file(), "Pro 3: Fusion Lens OCR GUI presente")
+check((ROOT_DIR / "configs/system/fusion-lens.desktop").is_file(), "Pro 3: Fusion Lens Desktop Entry presente")
+
+check((ROOT_DIR / "configs/system/fusion-color-picker.py").is_file(), "Pro 4: Color Picker GUI presente")
+check((ROOT_DIR / "configs/system/fusion-color-picker.desktop").is_file(), "Pro 4: Color Picker Desktop Entry presente")
+
+check((ROOT_DIR / "configs/system/fusion-cloud-connect.sh").is_file(), "Pro 5: Cloud Connect script presente")
+check((ROOT_DIR / "configs/system/fusion-cloud-connect.py").is_file(), "Pro 5: Cloud Connect GUI presente")
+check((ROOT_DIR / "configs/system/fusion-cloud-connect.desktop").is_file(), "Pro 5: Cloud Connect Desktop Entry presente")
+
+check((ROOT_DIR / "configs/software/fusion-software-hub.py").is_file(), "Pro 6: Software Hub GUI presente")
+check((ROOT_DIR / "configs/software/fusion-software-hub.desktop").is_file(), "Pro 6: Software Hub Desktop Entry presente")
+
+check((ROOT_DIR / "configs/system/fusion-waydroid-setup.sh").is_file(), "Pro 7: Android Subsystem script presente")
+check((ROOT_DIR / "configs/system/fusion-waydroid-gui.py").is_file(), "Pro 7: Android Subsystem GUI presente")
+check((ROOT_DIR / "configs/system/fusion-waydroid.desktop").is_file(), "Pro 7: Android Subsystem Desktop Entry presente")
+
+check((ROOT_DIR / "configs/system/fusion-hdr-assistant.py").is_file(), "Pro 8: HDR Studio GUI presente")
+check((ROOT_DIR / "configs/system/fusion-hdr-assistant.desktop").is_file(), "Pro 8: HDR Studio Desktop Entry presente")
+
+check((ROOT_DIR / "configs/system/fusion-cast.py").is_file(), "Pro 9: Fusion Cast GUI presente")
+check((ROOT_DIR / "configs/system/fusion-cast.desktop").is_file(), "Pro 9: Fusion Cast Desktop Entry presente")
+
+check((ROOT_DIR / "configs/system/fusion-devbox.py").is_file(), "Pro 10: Fusion DevBox GUI presente")
+check((ROOT_DIR / "configs/system/fusion-devbox.desktop").is_file(), "Pro 10: Fusion DevBox Desktop Entry presente")
+
+check((ROOT_DIR / "configs/kde/yakuakerc").is_file(), "Pro 11: Yakuake Quake HUD terminal conf presente")
+check(len(glyph_icons) >= 20, f"Ícones Fusion Glyphs expandidos para {len(glyph_icons)} SVGs")
+
 print("\n" + "=" * 65)
 print(f"RESULTADO: {passed} testes passaram | {len(errors)} falhas")
 print("=" * 65)
@@ -214,5 +249,5 @@ if errors:
         print(f"  - {e}")
     sys.exit(1)
 else:
-    print("\n[SUCESSO] TODAS AS 20 MELHORIAS E COMPONENTES FORAM VALIDADOS COM 0 ERROS!")
+    print("\n[SUCESSO] TODAS AS MELHORIAS E COMPONENTES FORAM VALIDADOS COM 0 ERROS!")
     sys.exit(0)

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Lens (OCR)
+Comment=Extrair texto da tela ou imagens diretamente para a área de transferência
+Exec=/usr/bin/fusion-lens
+Icon=edit-find
+Terminal=false
+Type=Application
+Categories=Utility;Office;Graphics;
+Keywords=ocr;lens;text;screen;capture;copy;
+StartupNotify=false

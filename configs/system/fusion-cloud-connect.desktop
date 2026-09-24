@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Cloud Connect
+Comment=Sincronização e montagem de Google Drive, OneDrive e Nextcloud no Dolphin
+Exec=/usr/bin/fusion-cloud-connect
+Icon=folder-cloud
+Terminal=false
+Type=Application
+Categories=Network;FileTransfer;Utility;
+Keywords=cloud;drive;gdrive;onedrive;nextcloud;dropbox;sync;
+StartupNotify=true

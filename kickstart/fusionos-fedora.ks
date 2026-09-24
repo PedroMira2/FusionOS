@@ -151,6 +151,11 @@ brightnessctl
 wf-recorder
 rsync
 gocryptfs
+rclone
+yakuake
+tesseract
+tesseract-langpack-por
+tesseract-langpack-eng
 %end
 
 
@@ -648,6 +653,54 @@ cp /usr/share/fusionos/repo/configs/system/fusion-auto-update.service /etc/syste
 cp /usr/share/fusionos/repo/configs/system/fusion-auto-update.timer /etc/systemd/system/ 2>/dev/null || true
 systemctl enable fusion-auto-update.timer 2>/dev/null || true
 
+# ==================================================================
+# 30. Pro Suite (Crisp Mic, AutoEQ, Lens OCR, Color Picker, Cloud, Hub, Waydroid, HDR, Cast, DevBox, Quake HUD)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/audio/fusion-crisp-mic.sh /usr/local/bin/fusion-crisp-mic 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-crisp-mic 2>/dev/null || true
+mkdir -p /usr/share/fusionos/audio/eq-profiles
+cp -r /usr/share/fusionos/repo/configs/audio/eq-profiles/* /usr/share/fusionos/audio/eq-profiles/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/audio/pipewire-crisp-mic.conf /usr/share/fusionos/audio/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-lens.py /usr/local/bin/fusion-lens 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-lens 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-lens.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-color-picker.py /usr/local/bin/fusion-color-picker 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-color-picker 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-color-picker.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-cloud-connect.sh /usr/local/bin/fusion-cloud-connect 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-cloud-connect 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-cloud-connect.py /usr/local/bin/fusion-cloud-connect-gui 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-cloud-connect-gui 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-cloud-connect.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/software/fusion-software-hub.py /usr/local/bin/fusion-software-hub 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-software-hub 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/software/fusion-software-hub.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-waydroid-setup.sh /usr/local/bin/fusion-waydroid-setup 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-waydroid-setup 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-waydroid-gui.py /usr/local/bin/fusion-waydroid-gui 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-waydroid-gui 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-waydroid.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-hdr-assistant.py /usr/local/bin/fusion-hdr-assistant 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-hdr-assistant 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-hdr-assistant.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-cast.py /usr/local/bin/fusion-cast 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-cast 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-cast.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/system/fusion-devbox.py /usr/local/bin/fusion-devbox 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-devbox 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-devbox.desktop /usr/share/applications/ 2>/dev/null || true
+
+cp /usr/share/fusionos/repo/configs/kde/yakuakerc $LIVE_HOME/.config/yakuakerc 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/kde/yakuakerc /etc/skel/.config/yakuakerc 2>/dev/null || true
+
 # Garantir symlinks universais em /usr/bin/ para todos os binarios em /usr/local/bin/
 for bin in /usr/local/bin/fusion-*; do
     if [ -x "$bin" ]; then
@@ -656,7 +709,7 @@ for bin in /usr/local/bin/fusion-*; do
 done
 
 # ==================================================================
-# 30. Rebranding OS (Zero Fedora)
+# 31. Rebranding OS (Zero Fedora)
 # ==================================================================
 cat <<'EOF' > /etc/os-release
 NAME="FusionOS"

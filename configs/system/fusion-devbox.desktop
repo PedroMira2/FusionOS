@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion DevBox
+Comment=Ambientes de programação isolados em containers (Node, Python AI, Rust, Go, Docker)
+Exec=/usr/bin/fusion-devbox
+Icon=applications-development
+Terminal=false
+Type=Application
+Categories=Development;System;Utility;
+Keywords=dev;developer;container;docker;node;python;rust;go;box;
+StartupNotify=true

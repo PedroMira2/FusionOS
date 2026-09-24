@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Android Subsystem
+Comment=Executar aplicativos e jogos do Android diretamente no Wayland
+Exec=/usr/bin/fusion-waydroid-gui
+Icon=smartphone
+Terminal=false
+Type=Application
+Categories=System;Utility;Emulator;
+Keywords=android;waydroid;apk;mobile;apps;games;
+StartupNotify=true
