@@ -1,0 +1,29 @@
+# Set default behavior to automatically normalize line endings to LF
+* text=auto eol=lf
+
+# Explicit text files
+*.ks text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.js text eol=lf
+*.conf text eol=lf
+*.desktop text eol=lf
+*.colorscheme text eol=lf
+*.profile text eol=lf
+*.qml text eol=lf
+*.desc text eol=lf
+*.json text eol=lf
+*.jsonc text eol=lf
+*.theme text eol=lf
+*.txt text eol=lf
+*.svg text eol=lf
+*.md text eol=lf
+*.ini text eol=lf
+
+# Binary files
+*.wav binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.iso binary
+*.img binary

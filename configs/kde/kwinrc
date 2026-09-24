@@ -36,3 +36,6 @@ ElectricBorders=1
 
 [Xwayland]
 XwaylandCrashPolicy=Stop
+
+[Wayland]
+VirtualDesktopNavigationGestures=true

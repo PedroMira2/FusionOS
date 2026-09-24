@@ -145,6 +145,8 @@ sound-theme-freedesktop
 easyeffects
 pipewire-codec-aptx
 libfreeaptx
+kde-connect
+kde-connect-libs
 %end
 
 
@@ -526,7 +528,42 @@ chown -R liveuser:liveuser $LIVE_HOME
 update-desktop-database /usr/share/applications || true
 
 # ==================================================================
-# 19. Rebranding OS (Zero Fedora)
+# 20. Spotlight HUD (KRunner)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/kde/krunnerrc $LIVE_HOME/.config/krunnerrc 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/kde/krunnerrc /etc/skel/.config/krunnerrc 2>/dev/null || true
+
+# ==================================================================
+# 21. Gestos Mac no Touchpad (Natural Scrolling & 1:1 Gestures)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/kde/touchpadrc $LIVE_HOME/.config/touchpadrc 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/kde/touchpadrc /etc/skel/.config/touchpadrc 2>/dev/null || true
+
+# ==================================================================
+# 22. Fusion Connect (Integracao com Celular)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/system/fusion-connect-setup.sh /usr/local/bin/fusion-connect-setup 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-connect-setup 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-connect.desktop /usr/share/applications/ 2>/dev/null || true
+
+# ==================================================================
+# 23. AdBlock e DNS-over-TLS Criptografado
+# ==================================================================
+mkdir -p /etc/systemd/resolved.conf.d
+cp /usr/share/fusionos/repo/configs/system/resolved-privacy.conf /etc/systemd/resolved.conf.d/privacy.conf 2>/dev/null || true
+systemctl enable systemd-resolved 2>/dev/null || true
+
+# ==================================================================
+# 24. Fusion Cleaner & Otimizador de Sistema
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/system/fusion-cleaner.sh /usr/local/bin/fusion-cleaner 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-cleaner 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-cleaner-gui.py /usr/local/bin/fusion-cleaner-gui.py 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-cleaner-gui.py 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-cleaner.desktop /usr/share/applications/ 2>/dev/null || true
+
+# ==================================================================
+# 25. Rebranding OS (Zero Fedora)
 # ==================================================================
 cat <<'EOF' > /etc/os-release
 NAME="FusionOS"

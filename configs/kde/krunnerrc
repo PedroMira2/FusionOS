@@ -1,0 +1,26 @@
+# ==============================================================================
+# FusionOS Spotlight HUD Specification (KRunner)
+# Proposito: Busca universal rapida, sem propagandas, com calculos e utilitarios
+# ==============================================================================
+
+[General]
+FreeFloating=true
+RetainPriorSearch=false
+ActivityAware=false
+
+[Plugins]
+baloosearchEnabled=true
+calculatorEnabled=true
+unitconverterEnabled=true
+servicesEnabled=true
+shellEnabled=true
+killEnabled=true
+recentdocumentsEnabled=true
+webshortcutsEnabled=false
+placesEnabled=true
+windowsEnabled=true
+helprunnerEnabled=false
+desktopsessionsEnabled=true
+
+[Plugins][Favorites]
+plugins=services,calculator,unitconverter,recentdocuments,shell,kill

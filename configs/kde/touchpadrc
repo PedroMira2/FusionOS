@@ -1,0 +1,14 @@
+# ==============================================================================
+# FusionOS Natural Touchpad Specification (Libinput / Wayland)
+# Proposito: Gestos fluidos, rolagem natural e toque suave como no macOS
+# ==============================================================================
+
+[parameters]
+naturalScroll=true
+tapToClick=true
+tapAndDrag=true
+twoFingerScroll=true
+pointerAcceleration=0.2
+disableWhileTyping=true
+middleClickEmulation=true
+rightClickMethod=2

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Fusion Cleaner
+Name[pt_BR]=Limpador e Otimizador FusionOS
+Comment=Limpeza de caches, logs antigos e recuperação de espaço no SSD
+Comment[pt_BR]=Limpeza de caches, logs antigos e recuperação de espaço no SSD
+Exec=/usr/local/bin/fusion-cleaner
+Icon=edit-clear
+Terminal=false
+Categories=System;Settings;Utility;
+StartupNotify=true

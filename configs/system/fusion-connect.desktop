@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Fusion Connect
+Name[pt_BR]=Fusion Connect (Vincular Celular)
+Comment=Compartilhe arquivos, notificações e área de transferência com seu celular
+Comment[pt_BR]=Compartilhe arquivos, notificações e área de transferência com seu celular
+Exec=kdeconnect-app
+Icon=kdeconnect
+Terminal=false
+Categories=Qt;KDE;Network;
+StartupNotify=true

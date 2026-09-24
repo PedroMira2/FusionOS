@@ -158,6 +158,24 @@ check((ROOT_DIR / "configs/audio/fusion-audio-service.sh").is_file(), "Serviço 
 check((ROOT_DIR / "configs/audio/fusion-sound-gui.py").is_file(), "Central gráfica de áudio fusion-sound-gui.py presente")
 check((ROOT_DIR / "configs/audio/fusion-sound-control.desktop").is_file(), "Atalho de controle de áudio presente")
 
+# 23. Testar Spotlight HUD (KRunner)
+check((ROOT_DIR / "configs/kde/krunnerrc").is_file(), "Configuração do Spotlight HUD krunnerrc presente")
+
+# 24. Testar Gestos Mac no Touchpad
+check((ROOT_DIR / "configs/kde/touchpadrc").is_file(), "Configuração de gestos de touchpad touchpadrc presente")
+
+# 25. Testar Fusion Connect (Integração com Celular)
+check((ROOT_DIR / "configs/system/fusion-connect-setup.sh").is_file(), "Script fusion-connect-setup.sh presente")
+check((ROOT_DIR / "configs/system/fusion-connect.desktop").is_file(), "Atalho fusion-connect.desktop presente")
+
+# 26. Testar AdBlock e DNS-over-TLS
+check((ROOT_DIR / "configs/system/resolved-privacy.conf").is_file(), "Configuração de DNS seguro resolved-privacy.conf presente")
+
+# 27. Testar Fusion Cleaner & Otimizador
+check((ROOT_DIR / "configs/system/fusion-cleaner.sh").is_file(), "Script fusion-cleaner.sh presente")
+check((ROOT_DIR / "configs/system/fusion-cleaner-gui.py").is_file(), "Interface GUI fusion-cleaner-gui.py presente")
+check((ROOT_DIR / "configs/system/fusion-cleaner.desktop").is_file(), "Atalho fusion-cleaner.desktop presente")
+
 print("\n" + "=" * 60)
 print(f"RESULTADO: {passed} testes passaram | {len(errors)} falhas")
 print("=" * 60)
