@@ -132,8 +132,9 @@ plasma-systemmonitor
 kde-gtk-config
 breeze-gtk
 klassy
-# Ferramentas de aparência
+# Ferramentas de aparência e terminal
 plasma-lookandfeel-tools
+fastfetch
 %end
 
 
@@ -319,7 +320,7 @@ if (panels.length > 0) {
 EOF
 
 # ==================================================================
-# 8. Integracao de Scripts do Sistema
+# 8. Integracao de Scripts do Sistema e Chameleon Engine
 # ==================================================================
 cp /usr/share/fusionos/repo/configs/onboarding/fusion-welcome.py \
    /usr/local/bin/ 2>/dev/null || true
@@ -336,6 +337,9 @@ chmod +x /usr/local/bin/fusion-switch-layout 2>/dev/null || true
 mkdir -p /usr/share/fusionos/layouts
 cp -r /usr/share/fusionos/repo/configs/layouts/*.js \
    /usr/share/fusionos/layouts/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/layouts/fusion-layout-gui.py \
+   /usr/share/fusionos/layouts/ 2>/dev/null || true
+chmod +x /usr/share/fusionos/layouts/fusion-layout-gui.py 2>/dev/null || true
 
 mkdir -p /usr/share/applications
 cp /usr/share/fusionos/repo/configs/layouts/fusion-layout-switcher.desktop \
@@ -345,7 +349,72 @@ cp /usr/share/fusionos/repo/configs/wine/fusion-exe-runner.desktop \
 update-desktop-database /usr/share/applications || true
 
 # ==================================================================
-# 9. Area de Trabalho (Desktop) - Atalhos Premium
+# 9. Calamares - Instalador com Branding e Slideshow FusionOS
+# ==================================================================
+mkdir -p /usr/share/calamares/branding/fusionos /etc/calamares
+cp -r /usr/share/fusionos/repo/configs/calamares/branding/fusionos/* \
+   /usr/share/calamares/branding/fusionos/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/calamares/settings.conf \
+   /etc/calamares/settings.conf 2>/dev/null || true
+
+# Gerar icones PNG do instalador a partir do logo oficial
+if command -v rsvg-convert >/dev/null 2>&1; then
+    rsvg-convert -w 128 -h 128 /usr/share/fusionos/repo/assets/fusionos-logo.svg \
+        -o /usr/share/calamares/branding/fusionos/logo.png 2>/dev/null || true
+    rsvg-convert -w 256 -h 256 /usr/share/fusionos/repo/assets/fusionos-logo.svg \
+        -o /usr/share/calamares/branding/fusionos/welcome.png 2>/dev/null || true
+fi
+
+# ==================================================================
+# 10. Bootloader GRUB 2 - Tema Premium
+# ==================================================================
+mkdir -p /boot/grub2/themes/fusionos
+cp -r /usr/share/fusionos/repo/configs/grub/theme/* \
+   /boot/grub2/themes/fusionos/ 2>/dev/null || true
+
+if command -v rsvg-convert >/dev/null 2>&1; then
+    rsvg-convert -w 1920 -h 1080 /usr/share/fusionos/repo/configs/grub/theme/background.svg \
+        -o /boot/grub2/themes/fusionos/background.png 2>/dev/null || true
+fi
+
+if [ -f /etc/default/grub ]; then
+    sed -i '/^GRUB_THEME=/d' /etc/default/grub 2>/dev/null || true
+    echo 'GRUB_THEME="/boot/grub2/themes/fusionos/theme.txt"' >> /etc/default/grub
+fi
+
+# ==================================================================
+# 11. GTK 3, GTK 4 & Konsole - Consistencia Dark em Todos os Apps
+# ==================================================================
+mkdir -p $LIVE_HOME/.config/gtk-3.0 $LIVE_HOME/.config/gtk-4.0
+mkdir -p /etc/skel/.config/gtk-3.0 /etc/skel/.config/gtk-4.0
+
+cp /usr/share/fusionos/repo/configs/gtk/gtk3-settings.ini $LIVE_HOME/.config/gtk-3.0/settings.ini 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/gtk/gtk4-settings.ini $LIVE_HOME/.config/gtk-4.0/settings.ini 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/gtk/gtk3-settings.ini /etc/skel/.config/gtk-3.0/settings.ini 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/gtk/gtk4-settings.ini /etc/skel/.config/gtk-4.0/settings.ini 2>/dev/null || true
+
+# Perfil e Cores do Konsole Terminal
+mkdir -p $LIVE_HOME/.local/share/konsole /usr/share/konsole
+cp /usr/share/fusionos/repo/configs/konsole/FusionOS-Dark.colorscheme $LIVE_HOME/.local/share/konsole/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/konsole/FusionOS.profile $LIVE_HOME/.local/share/konsole/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/konsole/FusionOS-Dark.colorscheme /usr/share/konsole/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/konsole/FusionOS.profile /usr/share/konsole/ 2>/dev/null || true
+
+cat <<'EOF' > $LIVE_HOME/.config/konsolerc
+[Desktop Entry]
+DefaultProfile=FusionOS.profile
+EOF
+
+# ==================================================================
+# 12. Fastfetch e Integracao de Terminal
+# ==================================================================
+mkdir -p /etc/fastfetch
+cp /usr/share/fusionos/repo/configs/fastfetch/config.jsonc /etc/fastfetch/config.jsonc 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-profile.sh /etc/profile.d/fusion-profile.sh 2>/dev/null || true
+chmod +x /etc/profile.d/fusion-profile.sh 2>/dev/null || true
+
+# ==================================================================
+# 13. Area de Trabalho (Desktop) - Atalhos Premium
 # ==================================================================
 mkdir -p $LIVE_HOME/Desktop
 mkdir -p $LIVE_HOME/.config/autostart
@@ -382,7 +451,7 @@ chmod +x $LIVE_HOME/Desktop/*.desktop
 chown -R liveuser:liveuser $LIVE_HOME
 
 # ==================================================================
-# 10. Rebranding OS (Zero Fedora)
+# 14. Rebranding OS (Zero Fedora)
 # ==================================================================
 cat <<'EOF' > /etc/os-release
 NAME="FusionOS"

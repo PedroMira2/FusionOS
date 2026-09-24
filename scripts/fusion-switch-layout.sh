@@ -14,7 +14,15 @@ fi
 TARGET_MODE="${1:-}"
 
 if [[ -z "$TARGET_MODE" ]]; then
-    if command -v kdialog >/dev/null 2>&1; then
+    # Se ha display grafico e o app PyQt6 existe, usa a interface moderna
+    GUI_APP="/usr/share/fusionos/layouts/fusion-layout-gui.py"
+    if [[ ! -f "$GUI_APP" ]]; then
+        GUI_APP="$(cd "$(dirname "${BASH_SOURCE[0]}")/../configs/layouts" && pwd)/fusion-layout-gui.py"
+    fi
+
+    if [[ -n "${DISPLAY:-}" || -n "${WAYLAND_DISPLAY:-}" ]] && [[ -f "$GUI_APP" ]] && command -v python3 >/dev/null 2>&1; then
+        exec python3 "$GUI_APP"
+    elif command -v kdialog >/dev/null 2>&1; then
         TARGET_MODE=$(kdialog --title "FusionOS - Personalizar Layout" \
             --radiolist "Escolha a aparencia que mais combina com seu estilo:" \
             "macos" "Estilo Mac (Barra Superior + Dock Flutuante Translúcido)" on \

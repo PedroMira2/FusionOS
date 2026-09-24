@@ -100,6 +100,28 @@ readme_content = (ROOT_DIR / "README.md").read_text(encoding="utf-8")
 for doc in ["docs/VALUE_PROPOSITION.md", "docs/BUILD_ISO.md", "docs/USER_GUIDE.md"]:
     check((ROOT_DIR / doc).is_file(), f"Documento citado no README existe: {doc}")
 
+# 11. Testar Calamares Installer Branding & Slideshow
+check((ROOT_DIR / "configs/calamares/branding/fusionos/branding.desc").is_file(), "Calamares branding.desc presente")
+check((ROOT_DIR / "configs/calamares/branding/fusionos/slideshow.qml").is_file(), "Calamares slideshow.qml presente")
+check((ROOT_DIR / "configs/calamares/settings.conf").is_file(), "Calamares settings.conf presente")
+
+# 12. Testar Tema do Bootloader GRUB 2
+check((ROOT_DIR / "configs/grub/theme/theme.txt").is_file(), "Tema do GRUB 2 theme.txt presente")
+check((ROOT_DIR / "configs/grub/theme/background.svg").is_file(), "Fundo do GRUB 2 background.svg presente")
+
+# 13. Testar Consistência GTK 3/4 e Konsole Dark Theme
+check((ROOT_DIR / "configs/gtk/gtk3-settings.ini").is_file(), "Tema GTK 3 gtk3-settings.ini presente")
+check((ROOT_DIR / "configs/gtk/gtk4-settings.ini").is_file(), "Tema GTK 4 gtk4-settings.ini presente")
+check((ROOT_DIR / "configs/konsole/FusionOS-Dark.colorscheme").is_file(), "Esquema de cores do Konsole presente")
+check((ROOT_DIR / "configs/konsole/FusionOS.profile").is_file(), "Perfil padrão do Konsole presente")
+
+# 14. Testar Interface Gráfica do Chameleon Layout Switcher
+check((ROOT_DIR / "configs/layouts/fusion-layout-gui.py").is_file(), "Chameleon GUI fusion-layout-gui.py presente")
+
+# 15. Testar Fastfetch e Perfil de Terminal
+check((ROOT_DIR / "configs/fastfetch/config.jsonc").is_file(), "Configuração do Fastfetch config.jsonc presente")
+check((ROOT_DIR / "configs/system/fusion-profile.sh").is_file(), "Script de perfil do terminal fusion-profile.sh presente")
+
 print("\n" + "=" * 60)
 print(f"RESULTADO: {passed} testes passaram | {len(errors)} falhas")
 print("=" * 60)
