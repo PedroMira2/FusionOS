@@ -5,6 +5,9 @@ on:
     branches: [ main, master ]
   workflow_dispatch: # Permite disparar a compilação com 1 clique no GitHub
 
+permissions:
+  contents: write
+
 jobs:
   build-iso:
     name: Compilar FusionOS Live ISO (Fedora 41 KDE)
@@ -39,9 +42,26 @@ jobs:
             --iso-name="FusionOS-Live-x86_64.iso" \
             --resultdir=output
 
-      - name: Fazer Upload da ISO Gerada (Download Disponível)
+          # O Lorax costuma gerar o arquivo em output/images/boot.iso
+          echo "Conteúdo do diretório de saída:"
+          find output -type f -ls
+
+          ISO_FOUND=$(find output -type f -name "*.iso" | head -n 1)
+          if [ -n "$ISO_FOUND" ]; then
+            echo "ISO gerada encontrada em: $ISO_FOUND"
+            if [ "$ISO_FOUND" != "output/FusionOS-Live-x86_64.iso" ]; then
+              cp -v "$ISO_FOUND" output/FusionOS-Live-x86_64.iso
+            fi
+            ls -lh output/FusionOS-Live-x86_64.iso
+          else
+            echo "ERRO: Nenhuma ISO foi encontrada em output!"
+            exit 1
+          fi
+
+      - name: Fazer Upload da ISO Gerada (Artifact)
         uses: actions/upload-artifact@v4
         with:
           name: FusionOS-Live-x86_64
           path: output/FusionOS-Live-x86_64.iso
           retention-days: 7
+          if-no-files-found: error

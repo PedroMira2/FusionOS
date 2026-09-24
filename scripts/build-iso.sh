@@ -65,6 +65,12 @@ livemedia-creator \
     --extra-boot-args="quiet splash" \
     --resultdir="$OUTPUT_DIR"
 
+# Lorax costuma gerar o arquivo em images/boot.iso dentro do resultdir
+ISO_FOUND=$(find "$OUTPUT_DIR" -type f -name "*.iso" 2>/dev/null | head -n 1)
+if [[ -n "$ISO_FOUND" && "$ISO_FOUND" != "${OUTPUT_DIR}/FusionOS-Live-x86_64.iso" ]]; then
+    mv -v "$ISO_FOUND" "${OUTPUT_DIR}/FusionOS-Live-x86_64.iso"
+fi
+
 echo -e "\n${GREEN}✔ Compilação concluída com sucesso!${NC}"
 echo -e "${GREEN}A ISO foi gerada em: ${OUTPUT_DIR}/FusionOS-Live-x86_64.iso${NC}"
 echo -e "Você já pode gravar esta imagem em um pendrive usando o BalenaEtcher ou Rufus."
