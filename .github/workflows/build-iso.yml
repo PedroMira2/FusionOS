@@ -7,10 +7,10 @@ on:
 
 jobs:
   build-iso:
-    name: Compilar FusionOS Live ISO (Fedora 40 KDE)
+    name: Compilar FusionOS Live ISO (Fedora 41 KDE)
     runs-on: ubuntu-latest
     container:
-      image: fedora:40
+      image: fedora:41
       options: --privileged # Necessário para montagem de loop devices e chroot
 
     steps:
@@ -34,7 +34,7 @@ jobs:
             --no-virt \
             --make-iso \
             --project="FusionOS-x86_64" \
-            --releasever="40" \
+            --releasever="41" \
             --volid="FusionOS_Live" \
             --iso-name="FusionOS-Live-x86_64.iso" \
             --resultdir=output
