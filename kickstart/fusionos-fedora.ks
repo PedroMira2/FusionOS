@@ -131,16 +131,20 @@ qt5-qtgraphicaleffects
 plasma-systemmonitor
 kde-gtk-config
 breeze-gtk
+klassy
 # Ferramentas de aparência e terminal
 plasma-lookandfeel-tools
 fastfetch
 
-# 6. Advanced Hardware, Power, Audio & Snapshots
+# 6. Audio Hi-Res, Bluetooth Destravado, Hardware & Performance
 pciutils
 power-profiles-daemon
 python3-dnf-plugin-snapper
 libcanberra
 sound-theme-freedesktop
+easyeffects
+pipewire-codec-aptx
+libfreeaptx
 %end
 
 
@@ -326,7 +330,7 @@ if (panels.length > 0) {
 EOF
 
 # ==================================================================
-# 8. Integracao de Scripts do Sistema e Chameleon Engine
+# 8. Integracao de Scripts do Sistema
 # ==================================================================
 cp /usr/share/fusionos/repo/configs/onboarding/fusion-welcome.py \
    /usr/local/bin/ 2>/dev/null || true
@@ -448,7 +452,6 @@ cp /usr/share/fusionos/repo/configs/system/fusion-hardware-assistant.desktop /us
 mkdir -p /usr/share/sounds/fusionos
 cp -r /usr/share/fusionos/repo/configs/sounds/fusionos/* /usr/share/sounds/fusionos/ 2>/dev/null || true
 
-# Startup Chime na entrada do usuario
 mkdir -p $LIVE_HOME/.config/autostart
 cat <<'EOF' > $LIVE_HOME/.config/autostart/fusion-sound.desktop
 [Desktop Entry]
@@ -461,7 +464,32 @@ StartupNotify=false
 EOF
 
 # ==================================================================
-# 17. Area de Trabalho (Desktop) - Atalhos Premium
+# 17. Motor de Audio Hi-Res, Dolby 3D & Bluetooth Destravado
+# ==================================================================
+mkdir -p /etc/pipewire/pipewire.conf.d /etc/wireplumber/wireplumber.conf.d
+cp /usr/share/fusionos/repo/configs/system/pipewire-hires.conf /etc/pipewire/pipewire.conf.d/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/wireplumber-bluetooth.conf /etc/wireplumber/wireplumber.conf.d/ 2>/dev/null || true
+
+mkdir -p /usr/share/fusionos/audio/presets
+cp -r /usr/share/fusionos/repo/configs/audio/presets/* /usr/share/fusionos/audio/presets/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/audio/fusion-audio-service.sh /usr/local/bin/fusion-audio-service 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-audio-service 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/audio/fusion-sound-gui.py /usr/local/bin/fusion-sound-gui.py 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-sound-gui.py 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/audio/fusion-sound-control.desktop /usr/share/applications/ 2>/dev/null || true
+
+cat <<'EOF' > $LIVE_HOME/.config/autostart/fusion-audio-service.desktop
+[Desktop Entry]
+Name=FusionOS Audio Service
+Comment=Motor de áudio Dolby 3D e DSP do FusionOS
+Exec=/usr/local/bin/fusion-audio-service
+Terminal=false
+Type=Application
+StartupNotify=false
+EOF
+
+# ==================================================================
+# 18. Area de Trabalho (Desktop) - Atalhos Premium
 # ==================================================================
 mkdir -p $LIVE_HOME/Desktop
 
@@ -498,7 +526,7 @@ chown -R liveuser:liveuser $LIVE_HOME
 update-desktop-database /usr/share/applications || true
 
 # ==================================================================
-# 18. Rebranding OS (Zero Fedora)
+# 19. Rebranding OS (Zero Fedora)
 # ==================================================================
 cat <<'EOF' > /etc/os-release
 NAME="FusionOS"

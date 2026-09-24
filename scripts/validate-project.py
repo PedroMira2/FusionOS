@@ -144,6 +144,20 @@ check((sound_dir / "stereo/message-new-instant.wav").is_file(), "Som de notifica
 check((sound_dir / "stereo/device-added.wav").is_file(), "Som de dispositivo conectado presente")
 check((sound_dir / "stereo/device-removed.wav").is_file(), "Som de dispositivo desconectado presente")
 
+# 20. Testar Motor de Áudio Hi-Res e Bluetooth Destravado
+check((ROOT_DIR / "configs/system/pipewire-hires.conf").is_file(), "Configuração PipeWire Hi-Res presente")
+check((ROOT_DIR / "configs/system/wireplumber-bluetooth.conf").is_file(), "Configuração WirePlumber Bluetooth Hi-Res presente")
+
+# 21. Testar Presets de Áudio Dolby 3D e Cinema
+check((ROOT_DIR / "configs/audio/presets/FusionOS-Dolby-Spatial.json").is_file(), "Preset Dolby Spatial 3D presente")
+check((ROOT_DIR / "configs/audio/presets/FusionOS-Super-Bass.json").is_file(), "Preset Super Bass presente")
+check((ROOT_DIR / "configs/audio/presets/FusionOS-Cinema-3D.json").is_file(), "Preset Cinema 3D presente")
+
+# 22. Testar Central de Áudio e Serviço de Inicialização
+check((ROOT_DIR / "configs/audio/fusion-audio-service.sh").is_file(), "Serviço de áudio fusion-audio-service.sh presente")
+check((ROOT_DIR / "configs/audio/fusion-sound-gui.py").is_file(), "Central gráfica de áudio fusion-sound-gui.py presente")
+check((ROOT_DIR / "configs/audio/fusion-sound-control.desktop").is_file(), "Atalho de controle de áudio presente")
+
 print("\n" + "=" * 60)
 print(f"RESULTADO: {passed} testes passaram | {len(errors)} falhas")
 print("=" * 60)

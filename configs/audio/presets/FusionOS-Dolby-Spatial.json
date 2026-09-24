@@ -1,0 +1,64 @@
+{
+  "output": {
+    "blocklist": [],
+    "plugins_order": [
+      "bass_enhancer",
+      "crystalizer",
+      "stereo_tools",
+      "limiter"
+    ],
+    "bass_enhancer": {
+      "amount": 4.5,
+      "blend": 0.0,
+      "floor": 30.0,
+      "harmonics": 6.0,
+      "scope": 110.0,
+      "bypass": false
+    },
+    "crystalizer": {
+      "band0": 2.0,
+      "band1": 3.0,
+      "band2": 4.0,
+      "intensities": [2.0, 3.0, 4.0],
+      "bypass": false
+    },
+    "stereo_tools": {
+      "balance-in": 0.0,
+      "balance-out": 0.0,
+      "delay": 0.0,
+      "dry-level": 0.0,
+      "middle-level": 0.0,
+      "middle-panorama": 0.0,
+      "mode": "LR > LR (Stereo Default)",
+      "mutel": false,
+      "muter": false,
+      "phasel": false,
+      "phaser": false,
+      "sc-level": 1.0,
+      "side-level": 1.35,
+      "side-panorama": 0.0,
+      "softclip": false,
+      "stereo-base": 0.35,
+      "stereo-phase": 0.0,
+      "wet-level": 0.0,
+      "bypass": false
+    },
+    "limiter": {
+      "alr": false,
+      "alr-attack": 5.0,
+      "alr-knee": 0.0,
+      "alr-release": 50.0,
+      "attack": 2.0,
+      "dithering": "None",
+      "gain-boost": true,
+      "input-gain": 1.5,
+      "knee": 0.0,
+      "limit": -0.3,
+      "lookahead": 4.0,
+      "mode": "Herm Thin",
+      "oversampling": "None",
+      "release": 15.0,
+      "bypass": false
+    }
+  }
+}

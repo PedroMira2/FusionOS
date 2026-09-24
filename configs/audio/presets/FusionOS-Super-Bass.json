@@ -1,0 +1,34 @@
+{
+  "output": {
+    "blocklist": [],
+    "plugins_order": [
+      "bass_enhancer",
+      "limiter"
+    ],
+    "bass_enhancer": {
+      "amount": 7.5,
+      "blend": 0.5,
+      "floor": 25.0,
+      "harmonics": 8.0,
+      "scope": 130.0,
+      "bypass": false
+    },
+    "limiter": {
+      "alr": false,
+      "alr-attack": 5.0,
+      "alr-knee": 0.0,
+      "alr-release": 50.0,
+      "attack": 2.0,
+      "dithering": "None",
+      "gain-boost": true,
+      "input-gain": 2.0,
+      "knee": 0.0,
+      "limit": -0.2,
+      "lookahead": 4.0,
+      "mode": "Herm Thin",
+      "oversampling": "None",
+      "release": 15.0,
+      "bypass": false
+    }
+  }
+}

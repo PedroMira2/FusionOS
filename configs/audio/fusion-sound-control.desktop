@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=FusionOS Master Audio
+Name[pt_BR]=Central de Áudio 3D FusionOS
+Comment=Processamento Dolby 3D Spatial e Bluetooth Hi-Res
+Comment[pt_BR]=Processamento Dolby 3D Spatial e Bluetooth Hi-Res
+Exec=/usr/local/bin/fusion-sound-gui.py
+Icon=audio-card
+Terminal=false
+Categories=AudioVideo;Audio;Qt;Settings;
+StartupNotify=true
