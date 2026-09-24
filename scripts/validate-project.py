@@ -122,6 +122,28 @@ check((ROOT_DIR / "configs/layouts/fusion-layout-gui.py").is_file(), "Chameleon 
 check((ROOT_DIR / "configs/fastfetch/config.jsonc").is_file(), "Configuração do Fastfetch config.jsonc presente")
 check((ROOT_DIR / "configs/system/fusion-profile.sh").is_file(), "Script de perfil do terminal fusion-profile.sh presente")
 
+# 16. Testar Btrfs Time Machine e Snapper
+check((ROOT_DIR / "configs/system/snapper-root.conf").is_file(), "Configuração do Snapper snapper-root.conf presente")
+check((ROOT_DIR / "configs/system/fusion-snapper-setup.sh").is_file(), "Script fusion-snapper-setup.sh presente")
+
+# 17. Testar Perfis de Energia e Performance
+check((ROOT_DIR / "configs/system/fusion-power-mode.sh").is_file(), "Script fusion-power-mode.sh presente")
+check((ROOT_DIR / "configs/system/fusion-power-gui.py").is_file(), "Interface GUI fusion-power-gui.py presente")
+check((ROOT_DIR / "configs/system/fusion-power-mode.desktop").is_file(), "Atalho fusion-power-mode.desktop presente")
+
+# 18. Testar Assistente de Drivers e Hardware
+check((ROOT_DIR / "configs/system/fusion-hardware-assistant.sh").is_file(), "Script fusion-hardware-assistant.sh presente")
+check((ROOT_DIR / "configs/system/fusion-hardware-gui.py").is_file(), "Interface GUI fusion-hardware-gui.py presente")
+check((ROOT_DIR / "configs/system/fusion-hardware-assistant.desktop").is_file(), "Atalho fusion-hardware-assistant.desktop presente")
+
+# 19. Testar Tema Sonoro Acústico
+sound_dir = ROOT_DIR / "configs/sounds/fusionos"
+check((sound_dir / "index.theme").is_file(), "Arquivo index.theme sonoro presente")
+check((sound_dir / "stereo/desktop-login.wav").is_file(), "Som de inicialização (desktop-login.wav) presente")
+check((sound_dir / "stereo/message-new-instant.wav").is_file(), "Som de notificação (message-new-instant.wav) presente")
+check((sound_dir / "stereo/device-added.wav").is_file(), "Som de dispositivo conectado presente")
+check((sound_dir / "stereo/device-removed.wav").is_file(), "Som de dispositivo desconectado presente")
+
 print("\n" + "=" * 60)
 print(f"RESULTADO: {passed} testes passaram | {len(errors)} falhas")
 print("=" * 60)

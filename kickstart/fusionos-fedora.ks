@@ -131,10 +131,16 @@ qt5-qtgraphicaleffects
 plasma-systemmonitor
 kde-gtk-config
 breeze-gtk
-klassy
 # Ferramentas de aparência e terminal
 plasma-lookandfeel-tools
 fastfetch
+
+# 6. Advanced Hardware, Power, Audio & Snapshots
+pciutils
+power-profiles-daemon
+python3-dnf-plugin-snapper
+libcanberra
+sound-theme-freedesktop
 %end
 
 
@@ -346,7 +352,6 @@ cp /usr/share/fusionos/repo/configs/layouts/fusion-layout-switcher.desktop \
    /usr/share/applications/ 2>/dev/null || true
 cp /usr/share/fusionos/repo/configs/wine/fusion-exe-runner.desktop \
    /usr/share/applications/ 2>/dev/null || true
-update-desktop-database /usr/share/applications || true
 
 # ==================================================================
 # 9. Calamares - Instalador com Branding e Slideshow FusionOS
@@ -357,7 +362,6 @@ cp -r /usr/share/fusionos/repo/configs/calamares/branding/fusionos/* \
 cp /usr/share/fusionos/repo/configs/calamares/settings.conf \
    /etc/calamares/settings.conf 2>/dev/null || true
 
-# Gerar icones PNG do instalador a partir do logo oficial
 if command -v rsvg-convert >/dev/null 2>&1; then
     rsvg-convert -w 128 -h 128 /usr/share/fusionos/repo/assets/fusionos-logo.svg \
         -o /usr/share/calamares/branding/fusionos/logo.png 2>/dev/null || true
@@ -393,7 +397,6 @@ cp /usr/share/fusionos/repo/configs/gtk/gtk4-settings.ini $LIVE_HOME/.config/gtk
 cp /usr/share/fusionos/repo/configs/gtk/gtk3-settings.ini /etc/skel/.config/gtk-3.0/settings.ini 2>/dev/null || true
 cp /usr/share/fusionos/repo/configs/gtk/gtk4-settings.ini /etc/skel/.config/gtk-4.0/settings.ini 2>/dev/null || true
 
-# Perfil e Cores do Konsole Terminal
 mkdir -p $LIVE_HOME/.local/share/konsole /usr/share/konsole
 cp /usr/share/fusionos/repo/configs/konsole/FusionOS-Dark.colorscheme $LIVE_HOME/.local/share/konsole/ 2>/dev/null || true
 cp /usr/share/fusionos/repo/configs/konsole/FusionOS.profile $LIVE_HOME/.local/share/konsole/ 2>/dev/null || true
@@ -414,10 +417,53 @@ cp /usr/share/fusionos/repo/configs/system/fusion-profile.sh /etc/profile.d/fusi
 chmod +x /etc/profile.d/fusion-profile.sh 2>/dev/null || true
 
 # ==================================================================
-# 13. Area de Trabalho (Desktop) - Atalhos Premium
+# 13. Btrfs Time Machine & Snapper
+# ==================================================================
+mkdir -p /etc/snapper/configs
+cp /usr/share/fusionos/repo/configs/system/snapper-root.conf /etc/snapper/configs/root 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-snapper-setup.sh /usr/local/bin/fusion-snapper-setup 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-snapper-setup 2>/dev/null || true
+
+# ==================================================================
+# 14. Perfis de Energia e Desempenho (Fusion Power Profiles)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/system/fusion-power-mode.sh /usr/local/bin/fusion-power-mode 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-power-mode 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-power-gui.py /usr/local/bin/fusion-power-gui.py 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-power-gui.py 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-power-mode.desktop /usr/share/applications/ 2>/dev/null || true
+
+# ==================================================================
+# 15. Assistente de Drivers e Hardware (NVIDIA / Wi-Fi)
+# ==================================================================
+cp /usr/share/fusionos/repo/configs/system/fusion-hardware-assistant.sh /usr/local/bin/fusion-hardware-assistant 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-hardware-assistant 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-hardware-gui.py /usr/local/bin/fusion-hardware-gui.py 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-hardware-gui.py 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-hardware-assistant.desktop /usr/share/applications/ 2>/dev/null || true
+
+# ==================================================================
+# 16. Identidade Sonora FusionOS (Sound Theme Acustico)
+# ==================================================================
+mkdir -p /usr/share/sounds/fusionos
+cp -r /usr/share/fusionos/repo/configs/sounds/fusionos/* /usr/share/sounds/fusionos/ 2>/dev/null || true
+
+# Startup Chime na entrada do usuario
+mkdir -p $LIVE_HOME/.config/autostart
+cat <<'EOF' > $LIVE_HOME/.config/autostart/fusion-sound.desktop
+[Desktop Entry]
+Name=FusionOS Startup Sound
+Comment=Som de boas-vindas do FusionOS
+Exec=sh -c 'sleep 2 && (paplay /usr/share/sounds/fusionos/stereo/desktop-login.wav 2>/dev/null || pw-play /usr/share/sounds/fusionos/stereo/desktop-login.wav 2>/dev/null || true)'
+Terminal=false
+Type=Application
+StartupNotify=false
+EOF
+
+# ==================================================================
+# 17. Area de Trabalho (Desktop) - Atalhos Premium
 # ==================================================================
 mkdir -p $LIVE_HOME/Desktop
-mkdir -p $LIVE_HOME/.config/autostart
 
 cat <<'EOF' > $LIVE_HOME/Desktop/fusion-welcome.desktop
 [Desktop Entry]
@@ -449,9 +495,10 @@ cp $LIVE_HOME/Desktop/fusion-welcome.desktop \
    $LIVE_HOME/.config/autostart/
 chmod +x $LIVE_HOME/Desktop/*.desktop
 chown -R liveuser:liveuser $LIVE_HOME
+update-desktop-database /usr/share/applications || true
 
 # ==================================================================
-# 14. Rebranding OS (Zero Fedora)
+# 18. Rebranding OS (Zero Fedora)
 # ==================================================================
 cat <<'EOF' > /etc/os-release
 NAME="FusionOS"
@@ -472,6 +519,6 @@ echo "fusionos" > /etc/hostname
 
 echo ""
 echo "======================================================"
-echo "  FusionOS UI Redesign - Kickstart 100% Configurado!"
+echo "  FusionOS 1.0 Noble - Kickstart 100% Configurado!"
 echo "======================================================"
 %end

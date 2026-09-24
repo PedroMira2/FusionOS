@@ -26,3 +26,6 @@ LookAndFeelPackage=org.kde.breezedark.desktop
 ScrollbarWidth=10
 SingleClick=false
 WidgetStyle=Breeze
+
+[Sounds]
+Theme=fusionos

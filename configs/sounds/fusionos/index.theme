@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=FusionOS
+Name[pt_BR]=FusionOS Acústico
+Comment=Tema sonoro acústico de luxo do FusionOS
+Directories=stereo
+
+[stereo]
+OutputProfile=stereo

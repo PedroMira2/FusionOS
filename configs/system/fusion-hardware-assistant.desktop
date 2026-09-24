@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=FusionOS Driver Assistant
+Name[pt_BR]=Assistente de Drivers FusionOS
+Comment=Diagnóstico de hardware e instalação de drivers NVIDIA
+Comment[pt_BR]=Diagnóstico de hardware e instalação de drivers NVIDIA
+Exec=/usr/local/bin/fusion-hardware-assistant
+Icon=video-display
+Terminal=false
+Categories=Settings;HardwareSettings;System;
+StartupNotify=true

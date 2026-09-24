@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=FusionOS Power Profiles
+Name[pt_BR]=Perfis de Desempenho FusionOS
+Comment=Mude entre modo Silencioso, Equilibrado e Gamer
+Comment[pt_BR]=Mude entre modo Silencioso, Equilibrado e Gamer
+Exec=/usr/local/bin/fusion-power-mode
+Icon=preferences-system-power
+Terminal=false
+Categories=Settings;HardwareSettings;Qt;System;
+StartupNotify=true
