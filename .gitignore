@@ -1,0 +1,49 @@
+# ===================================================
+# FusionOS .gitignore
+# ===================================================
+
+# ISOs e imagens de disco (ficheiros muito grandes para o GitHub)
+*.iso
+*.img
+*.qcow2
+*.vmdk
+*.vhd
+*.vdi
+
+# Diretórios de output do build
+output/
+/var/tmp/lmc-work-*/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# Logs
+*.log
+logs/
+
+# Editor e sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# SSH keys (nunca commitar!)
+*.pem
+*.key
+id_rsa
+id_ed25519

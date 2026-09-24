@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Script para expandir a partição raiz automaticamente no Fedora (Suporta Btrfs, Ext4, XFS e LVM)
+set -e
 set -x
 
 echo "Instalando ferramentas de expansão..."

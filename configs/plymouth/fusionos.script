@@ -1,58 +1,53 @@
-# ==============================================================================
-# FusionOS - Plymouth Boot Animation Script
-# Proposito: Centraliza o logo do FusionOS com animacao de pulsacao e barra de progresso
-# ==============================================================================
+Window.SetBackgroundTopColor(13.0/255.0, 15.0/255.0, 26.0/255.0);
+Window.SetBackgroundBottomColor(13.0/255.0, 15.0/255.0, 26.0/255.0);
 
-screen_width = Window.GetWidth();
-screen_height = Window.GetHeight();
+logo.image = Image("fusionos-logo.png");
+logo.sprite = Sprite(logo.image);
+logo.width = logo.image.GetWidth();
+logo.height = logo.image.GetHeight();
+logo.sprite.SetX(Window.GetWidth() / 2 - logo.width / 2);
+logo.sprite.SetY(Window.GetHeight() / 2 - logo.height / 2);
 
-# Cor de fundo: Preto puro (#030712)
-Window.SetBackgroundTopColor(0.01, 0.03, 0.07);
-Window.SetBackgroundBottomColor(0.01, 0.03, 0.07);
+progress_bar.max_width = 300;
+# Se o Image("progress-bar.png") não existir, ele tentará usar um. Como o Plymouth nativamente
+# precisa de imagens, deixamos preparado. 
+progress_bar.image = Image("progress-bar.png");
+progress_bar.sprite = Sprite();
 
-# Carrega o logo do FusionOS
-logo.original_image = Image("logo.png");
-if (logo.original_image) {
-    logo.image = logo.original_image.Scale(256, 256);
-    logo.sprite = Sprite(logo.image);
-    logo.x = (screen_width / 2) - (256 / 2);
-    logo.y = (screen_height / 2) - (256 / 2) - 40;
-    logo.sprite.SetX(logo.x);
-    logo.sprite.SetY(logo.y);
-    logo.sprite.SetOpacity(1.0);
-}
+message_sprite = Sprite();
+message_sprite.SetPosition(20, Window.GetHeight() - 40, 10000);
 
-# Animacao de pulsacao e progresso suave
-opacity = 0.5;
-direction = 1;
-
-fun refresh_callback() {
-    if (direction == 1) {
-        opacity += 0.02;
-        if (opacity >= 1.0) {
-            opacity = 1.0;
-            direction = -1;
-        }
-    } else {
-        opacity -= 0.02;
-        if (opacity <= 0.4) {
-            opacity = 0.4;
-            direction = 1;
+fun boot_progress_callback(time, progress) {
+    # Scala animada 0.85 -> 1.0 -> 0.85 usando Seno
+    scale = 0.85 + ((Math.Sin(time * 3) + 1.0) / 2.0) * 0.15;
+    scaled_logo = logo.image.Scale(logo.width * scale, logo.height * scale);
+    logo.sprite.SetImage(scaled_logo);
+    logo.sprite.SetX(Window.GetWidth() / 2 - (logo.width * scale) / 2);
+    logo.sprite.SetY(Window.GetHeight() / 2 - (logo.height * scale) / 2);
+    
+    if (progress_bar.image) {
+        width = progress * progress_bar.max_width;
+        if (width > 0) {
+            # Barra fina de 3px
+            scaled_bar = progress_bar.image.Scale(width, 3);
+            progress_bar.sprite.SetImage(scaled_bar);
+            progress_bar.sprite.SetX(Window.GetWidth() / 2 - width / 2);
+            progress_bar.sprite.SetY(Window.GetHeight() / 2 + logo.height / 2 + 50);
         }
     }
-    if (logo.sprite) {
-        logo.sprite.SetOpacity(opacity);
-    }
 }
+Plymouth.SetBootProgressFunction(boot_progress_callback);
 
-Plymouth.SetRefreshFunction(refresh_callback);
+fun message_callback(text) {
+    # Texto pequeno cor cinza suave
+    text_image = Image.Text(text, 0.7, 0.7, 0.7, 1.0, "sans-serif 11");
+    message_sprite.SetImage(text_image);
+}
+Plymouth.SetMessageFunction(message_callback);
 
-# Tratamento para mensagens do sistema e desligamento
 fun quit_callback() {
-    if (logo.sprite) {
-        logo.sprite.SetOpacity(0);
-    }
+    logo.sprite.SetOpacity(0);
+    progress_bar.sprite.SetOpacity(0);
+    message_sprite.SetOpacity(0);
 }
-
 Plymouth.SetQuitFunction(quit_callback);
-

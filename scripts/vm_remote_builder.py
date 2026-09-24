@@ -17,25 +17,7 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(VM_IP, port=VM_PORT, username=VM_USER, password=VM_PASS, timeout=15)
 print("[+] Conectado com sucesso à VM!")
 
-local_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sftp = ssh.open_sftp()
-print(f"[*] Sincronizando kickstart e scripts diretamente via SFTP...")
-files_to_sync = [
-    ("kickstart/fusionos-fedora.ks", "/home/testes/FusionOS/kickstart/fusionos-fedora.ks"),
-    ("scripts/build-iso.sh", "/home/testes/FusionOS/scripts/build-iso.sh"),
-    ("scripts/fusion-setup.sh", "/home/testes/FusionOS/scripts/fusion-setup.sh"),
-]
-for rel_local, remote_path in files_to_sync:
-    local_path = os.path.join(local_root, rel_local.replace("/", os.sep))
-    if os.path.exists(local_path):
-        try:
-            sftp.put(local_path, remote_path)
-            print(f"    -> Enviado: {rel_local}")
-        except Exception as e:
-            print(f"    -> Erro ao enviar {rel_local}: {e}")
-sftp.close()
-
-cmd = "cd ~/FusionOS && git pull origin main && echo 'Pedromira28@' | sudo -S rm -rf output /var/tmp/dnf* /tmp/dnf* /run/anaconda.pid && echo 'Pedromira28@' | sudo -S bash scripts/build-iso.sh"
+cmd = "cd ~/FusionOS && git reset --hard HEAD && git pull origin main && echo 'Pedromira28@' | sudo -S rm -rf output /var/tmp/dnf* /tmp/dnf* /run/anaconda.pid && echo 'Pedromira28@' | sudo -S bash scripts/build-iso.sh"
 print(f"[*] Executando comando na VM:\n    {cmd}\n" + "=" * 60)
 
 stdin, stdout, stderr = ssh.exec_command(cmd, get_pty=True)

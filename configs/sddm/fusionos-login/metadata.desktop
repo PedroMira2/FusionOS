@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=FusionOS Login
+Comment=FusionOS Premium Dark Login Theme
+Type=sddm-theme
+Exec=Main.qml
+Version=1.0
+
+[SddmGreeterTheme]
+Name=FusionOS Login
+Description=FusionOS Premium Dark Login Theme
+Author=FusionOS Team
+License=GPLv3
+Type=sddm-theme
+Version=1.0
+Website=https://github.com/PedroMira2/FusionOS
+Screenshot=
+MainScript=Main.qml

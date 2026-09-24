@@ -1,64 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150">
   <defs>
-    <!-- Gradiente Fundo: Profundo e Sofisticado -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a0f1d" />
-      <stop offset="50%" stop-color="#0f172a" />
-      <stop offset="100%" stop-color="#020617" />
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B8BFF" />
+      <stop offset="100%" stop-color="#3A60D9" />
     </linearGradient>
-
-    <!-- Gradiente Aura / Mac Glow -->
-    <linearGradient id="fusionAura" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="50%" stop-color="#818cf8" />
-      <stop offset="100%" stop-color="#c084fc" />
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#5B2BE0" />
     </linearGradient>
-
-    <!-- Gradiente Windows Modern Cyan -->
-    <linearGradient id="winGlow" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#06b6d4" />
-      <stop offset="100%" stop-color="#3b82f6" />
-    </linearGradient>
-
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="16" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
   </defs>
-
-  <!-- Fundo com Cantos Arredondados estilo macOS App Icon -->
-  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
-  <rect width="508" height="508" x="2" y="2" rx="110" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3" />
-
-  <!-- Geometria do Fusion 'F' Infinito Fluido -->
-  <!-- Onda Superior Mac Fluidity -->
-  <path d="M140 180 C 140 130, 200 120, 260 120 C 340 120, 380 160, 380 210 C 380 250, 340 270, 290 280 L 210 295 C 160 305, 140 330, 140 370" 
-        fill="none" 
-        stroke="url(#fusionAura)" 
-        stroke-width="38" 
-        stroke-linecap="round" 
-        filter="url(#softGlow)" />
-
-  <!-- Linha Central Fusion Windows Productivity -->
-  <path d="M140 250 L 320 250" 
-        fill="none" 
-        stroke="url(#winGlow)" 
-        stroke-width="34" 
-        stroke-linecap="round" />
-
-  <!-- Ponto de Foco Dinamico -->
-  <circle cx="380" cy="210" r="18" fill="#38bdf8" filter="url(#softGlow)" />
-  <circle cx="140" cy="370" r="16" fill="#c084fc" filter="url(#softGlow)" />
-
-  <!-- Texto FusionOS -->
-  <text x="256" y="445" 
-        text-anchor="middle" 
-        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" 
-        font-size="44" 
-        font-weight="800" 
-        letter-spacing="4" 
-        fill="#f8fafc">
-    FUSION<tspan fill="#38bdf8">OS</tspan>
-  </text>
+  
+  <g transform="translate(30, 30)">
+    <!-- Hexagon 1 -->
+    <polygon points="25,0 75,0 100,43.3 75,86.6 25,86.6 0,43.3" fill="url(#grad1)" />
+    <!-- Hexagon 2 -->
+    <polygon points="65,25 115,25 140,68.3 115,111.6 65,111.6 40,68.3" fill="url(#grad2)" opacity="0.85" />
+    <!-- Intersection -->
+    <polygon points="65,25 75,0 100,43.3 75,86.6 65,111.6 40,68.3" fill="#7CA3FF" opacity="0.6" />
+  </g>
+  
+  <text x="190" y="85" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="42" fill="#E8ECF5">FusionOS</text>
+  <text x="195" y="115" font-family="Inter, system-ui, sans-serif" font-style="italic" font-size="14" fill="#6B7280">Make it yours.</text>
 </svg>
-
