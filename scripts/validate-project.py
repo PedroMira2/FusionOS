@@ -239,6 +239,22 @@ check((ROOT_DIR / "configs/system/fusion-devbox.desktop").is_file(), "Pro 10: Fu
 check((ROOT_DIR / "configs/kde/yakuakerc").is_file(), "Pro 11: Yakuake Quake HUD terminal conf presente")
 check(len(glyph_icons) >= 20, f"Ícones Fusion Glyphs expandidos para {len(glyph_icons)} SVGs")
 
+# Grupo 7: Otimizações Extremas & 4 Modos Dedicados
+power_sh = (ROOT_DIR / "configs/system/fusion-power-mode.sh").read_text(encoding="utf-8")
+for m in ["powersave", "multitask", "performance", "gaming"]:
+    check(m in power_sh, f"Perfil de energia dedicado presente: {m}")
+
+check((ROOT_DIR / "configs/wine/dxvk.conf").is_file(), "DXVK config presente")
+check("dxvk.enableAsync = true" in (ROOT_DIR / "configs/wine/dxvk.conf").read_text(encoding="utf-8"), "DXVK compilação assíncrona ativa (Zero Stutter)")
+
+check((ROOT_DIR / "configs/system/60-fusion-iosched.rules").is_file(), "Regras udev de scheduler I/O para NVMe/SSDs presentes")
+check((ROOT_DIR / "configs/system/fusion-speed.conf").is_file(), "Configuração systemd de boot/shutdown instantâneo presente")
+check((ROOT_DIR / "configs/system/fusion-environment.conf").is_file(), "Variáveis globais de aceleração e Wayland nativo presentes")
+check((ROOT_DIR / "configs/system/99-fusion-limits.conf").is_file(), "Limites de processo expandidos (nofile 1048576) presentes")
+
+check((ROOT_DIR / "configs/system/fusion-turbo-gui.py").is_file(), "Fusion Turbo Center GUI presente")
+check((ROOT_DIR / "configs/system/fusion-turbo.desktop").is_file(), "Fusion Turbo Center Desktop Entry presente")
+
 print("\n" + "=" * 65)
 print(f"RESULTADO: {passed} testes passaram | {len(errors)} falhas")
 print("=" * 65)
@@ -249,5 +265,5 @@ if errors:
         print(f"  - {e}")
     sys.exit(1)
 else:
-    print("\n[SUCESSO] TODAS AS MELHORIAS E COMPONENTES FORAM VALIDADOS COM 0 ERROS!")
+    print("\n[SUCESSO] TODAS AS MELHORIAS E OTIMIZACOES FORAM VALIDADAS COM 0 ERROS!")
     sys.exit(0)

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-FusionOS - Power & Performance Profile GUI
-Interface moderna em PyQt6 para alternar perfis de energia e desempenho com 1 clique.
+FusionOS - Extreme Power & Performance Profile GUI
+Interface moderna em PyQt6 para alternar entre os 4 modos dedicados:
+Economia, Multitarefas, Desempenho Máximo e Jogos Extremo.
 """
 
 import sys
@@ -22,41 +23,41 @@ class PowerCard(QFrame):
         self.parent_gui = parent_gui
         self.is_selected = False
 
-        self.setFixedSize(150, 200)
+        self.setFixedSize(140, 205)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(12, 16, 12, 16)
-        layout.setSpacing(8)
+        layout.setContentsMargins(12, 14, 12, 14)
+        layout.setSpacing(6)
 
         # Tag
         self.tag_label = QLabel(tag)
         self.tag_label.setStyleSheet("""
             background-color: #1E243D;
             color: #5B8BFF;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: bold;
             padding: 2px 6px;
             border-radius: 4px;
         """)
-        self.tag_label.setFixedHeight(20)
+        self.tag_label.setFixedHeight(18)
         layout.addWidget(self.tag_label, alignment=Qt.AlignmentFlag.AlignLeft)
 
         # Icone
         self.icon_label = QLabel(icon)
-        self.icon_label.setStyleSheet("font-size: 34px; background: transparent;")
+        self.icon_label.setStyleSheet("font-size: 32px; background: transparent;")
         self.icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.icon_label)
 
         # Titulo
         self.title_label = QLabel(title)
-        self.title_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #E8ECF5; background: transparent;")
+        self.title_label.setStyleSheet("font-size: 13px; font-weight: bold; color: #E8ECF5; background: transparent; font-family: 'Inter';")
         self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.title_label)
 
         # Subtitulo
         self.sub_label = QLabel(subtitle)
-        self.sub_label.setStyleSheet("font-size: 10px; color: #9CA3AF; background: transparent;")
+        self.sub_label.setStyleSheet("font-size: 9px; color: #9CA3AF; background: transparent;")
         self.sub_label.setWordWrap(True)
         self.sub_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.sub_label)
@@ -97,12 +98,12 @@ class PowerCard(QFrame):
 class FusionPowerGUI(QWidget):
     def __init__(self):
         super().__init__()
-        self.selected_mode = "balanced"
+        self.selected_mode = "multitask"
         self.cards = {}
         self.old_pos = QPoint()
 
-        self.setWindowTitle("FusionOS Power Profiles")
-        self.setFixedSize(540, 360)
+        self.setWindowTitle("FusionOS Power & Performance Profiles")
+        self.setFixedSize(660, 360)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
@@ -118,12 +119,12 @@ class FusionPowerGUI(QWidget):
             QWidget#container {
                 background-color: #0D0F1A;
                 border: 1px solid #2E3452;
-                border-radius: 16px;
+                border-radius: 18px;
             }
         """)
 
         shadow = QGraphicsDropShadowEffect(self)
-        shadow.setBlurRadius(30)
+        shadow.setBlurRadius(36)
         shadow.setColor(QColor(0, 0, 0, 180))
         shadow.setOffset(0, 6)
         container.setGraphicsEffect(shadow)
@@ -137,11 +138,11 @@ class FusionPowerGUI(QWidget):
         title_vbox = QVBoxLayout()
         title_vbox.setSpacing(2)
 
-        title = QLabel("Perfis de Desempenho")
-        title.setStyleSheet("font-size: 18px; font-weight: bold; color: #E8ECF5;")
+        title = QLabel("Perfis de Desempenho FusionOS")
+        title.setStyleSheet("font-size: 17px; font-weight: bold; color: #E8ECF5; font-family: 'Inter';")
 
-        subtitle = QLabel("Ajuste o comportamento do hardware para seu fluxo")
-        subtitle.setStyleSheet("font-size: 12px; color: #9CA3AF;")
+        subtitle = QLabel("Otimização dedicada de CPU, GPU, latência e consumo térmico")
+        subtitle.setStyleSheet("font-size: 11px; color: #8F9CAE;")
 
         title_vbox.addWidget(title)
         title_vbox.addWidget(subtitle)
@@ -150,15 +151,16 @@ class FusionPowerGUI(QWidget):
         header_hbox.addStretch()
 
         btn_close = QPushButton("✕")
-        btn_close.setFixedSize(28, 28)
+        btn_close.setFixedSize(26, 26)
         btn_close.setCursor(Qt.CursorShape.PointingHandCursor)
         btn_close.setStyleSheet("""
             QPushButton {
                 background: #1A1D2B;
                 border: 1px solid #2E3452;
-                border-radius: 14px;
+                border-radius: 13px;
                 color: #9CA3AF;
                 font-size: 12px;
+                font-weight: bold;
             }
             QPushButton:hover {
                 background: #FF6B7A;
@@ -171,21 +173,24 @@ class FusionPowerGUI(QWidget):
 
         main_vbox.addLayout(header_hbox)
 
-        # Cards
+        # 4 Cards
         cards_hbox = QHBoxLayout()
-        cards_hbox.setSpacing(12)
+        cards_hbox.setSpacing(10)
 
-        c1 = PowerCard("powersave", "Silencioso", "Economia e bateria máxima", "🍃", "ECO", self)
-        c2 = PowerCard("balanced", "Equilibrado", "Desempenho fluido diário", "⚖️", "PADRÃO", self)
-        c3 = PowerCard("performance", "Ultra Gamer", "Clock total e GameMode", "🚀", "TURBO", self)
+        c1 = PowerCard("powersave", "Economia", "Autonomia e silêncio absoluto", "🍃", "ECO", self)
+        c2 = PowerCard("multitask", "Multitarefas", "Abas, compilação e edição", "⚡", "MULTITASK", self)
+        c3 = PowerCard("performance", "Desempenho", "Clock total e renderização", "🚀", "MÁXIMO", self)
+        c4 = PowerCard("gaming", "Jogos Extremo", "GameMode e latência zero", "🎮", "GAMER", self)
 
         self.cards["powersave"] = c1
-        self.cards["balanced"] = c2
+        self.cards["multitask"] = c2
         self.cards["performance"] = c3
+        self.cards["gaming"] = c4
 
         cards_hbox.addWidget(c1)
         cards_hbox.addWidget(c2)
         cards_hbox.addWidget(c3)
+        cards_hbox.addWidget(c4)
 
         main_vbox.addLayout(cards_hbox)
         c2.set_selected(True)
@@ -195,7 +200,7 @@ class FusionPowerGUI(QWidget):
         footer_hbox.addStretch()
 
         self.btn_apply = QPushButton("Aplicar Perfil")
-        self.btn_apply.setFixedSize(140, 38)
+        self.btn_apply.setFixedSize(140, 36)
         self.btn_apply.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_apply.setStyleSheet("""
             QPushButton {

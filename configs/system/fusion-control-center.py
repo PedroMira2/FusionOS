@@ -235,18 +235,19 @@ class FusionControlCenter(QWidget):
         pwr_layout.addWidget(lbl_pwr)
 
         pwr_buttons = QHBoxLayout()
-        pwr_buttons.setSpacing(6)
-        self.btn_eco = QPushButton("Econômico")
-        self.btn_bal = QPushButton("Equilibrado")
-        self.btn_perf = QPushButton("Ultra Performance")
-        for b, mode in [(self.btn_eco, "powersave"), (self.btn_bal, "balanced"), (self.btn_perf, "performance")]:
+        pwr_buttons.setSpacing(4)
+        self.btn_eco = QPushButton("Eco")
+        self.btn_multi = QPushButton("Multitarefa")
+        self.btn_perf = QPushButton("Máximo")
+        self.btn_game = QPushButton("Jogos")
+        for b, mode in [(self.btn_eco, "powersave"), (self.btn_multi, "multitask"), (self.btn_perf, "performance"), (self.btn_game, "gaming")]:
             b.setCursor(Qt.CursorShape.PointingHandCursor)
-            b.setFixedHeight(30)
+            b.setFixedHeight(28)
             b.clicked.connect(lambda ch, m=mode: self.set_power_mode(m))
             pwr_buttons.addWidget(b)
         pwr_layout.addLayout(pwr_buttons)
         panel_layout.addWidget(pwr_card)
-        self.set_power_ui("balanced")
+        self.set_power_ui("multitask")
 
         # Atalhos de Aplicativos do Sistema
         apps_layout = QHBoxLayout()
@@ -349,11 +350,12 @@ class FusionControlCenter(QWidget):
         subprocess.Popen(["/usr/bin/fusion-power-mode", mode], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def set_power_ui(self, active_mode):
-        style_active = "background: #5B8BFF; color: white; border-radius: 6px; font-weight: bold; font-size: 11px; border: none;"
-        style_inactive = "background: #1F2538; color: #8F9CAE; border-radius: 6px; font-size: 11px; border: 1px solid #2A314A;"
+        style_active = "background: #5B8BFF; color: white; border-radius: 6px; font-weight: bold; font-size: 10px; border: none;"
+        style_inactive = "background: #1F2538; color: #8F9CAE; border-radius: 6px; font-size: 10px; border: 1px solid #2A314A;"
         self.btn_eco.setStyleSheet(style_active if active_mode == "powersave" else style_inactive)
-        self.btn_bal.setStyleSheet(style_active if active_mode == "balanced" else style_inactive)
+        self.btn_multi.setStyleSheet(style_active if active_mode == "multitask" else style_inactive)
         self.btn_perf.setStyleSheet(style_active if active_mode == "performance" else style_inactive)
+        self.btn_game.setStyleSheet(style_active if active_mode == "gaming" else style_inactive)
 
     def launch_app(self, cmd):
         subprocess.Popen(cmd.split(), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

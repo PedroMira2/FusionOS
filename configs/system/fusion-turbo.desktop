@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fusion Turbo Center
+Comment=Central de Otimização Extrema, Perfis de Desempenho e TRIM de SSDs
+Exec=/usr/bin/fusion-turbo-gui
+Icon=applications-utilities
+Terminal=false
+Type=Application
+Categories=Settings;HardwareSettings;System;Utility;
+Keywords=turbo;performance;boost;ssd;trim;ram;benchmark;gaming;
+StartupNotify=true

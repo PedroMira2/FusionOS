@@ -1,0 +1,12 @@
+# ==============================================================================
+# FusionOS Ultra-Fast NVMe & SSD I/O Scheduler Rules
+# ==============================================================================
+
+# SSDs NVMe de alta velocidade: scheduler 'none' para bypass de fila e latência mínima
+ACTION=="add|change", KERNEL=="nvme[0-9]*n[0-9]*", ATTR{queue/scheduler}="none"
+
+# SSDs SATA e unidades flash: mq-deadline para equilíbrio de throughput
+ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+
+# Discos rígidos mecânicos (HDDs): bfq para justiça de I/O
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"

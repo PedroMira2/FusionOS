@@ -698,6 +698,18 @@ cp /usr/share/fusionos/repo/configs/system/fusion-devbox.py /usr/local/bin/fusio
 chmod +x /usr/local/bin/fusion-devbox 2>/dev/null || true
 cp /usr/share/fusionos/repo/configs/system/fusion-devbox.desktop /usr/share/applications/ 2>/dev/null || true
 
+cp /usr/share/fusionos/repo/configs/system/fusion-turbo-gui.py /usr/local/bin/fusion-turbo-gui 2>/dev/null || true
+chmod +x /usr/local/bin/fusion-turbo-gui 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-turbo.desktop /usr/share/applications/ 2>/dev/null || true
+
+# Otimizações Extremas de I/O, DXVK, Boot e Variáveis Globais
+mkdir -p /etc/udev/rules.d /etc/systemd/system.conf.d /etc/security/limits.d
+cp /usr/share/fusionos/repo/configs/system/60-fusion-iosched.rules /etc/udev/rules.d/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/fusion-speed.conf /etc/systemd/system.conf.d/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/system/99-fusion-limits.conf /etc/security/limits.d/ 2>/dev/null || true
+cp /usr/share/fusionos/repo/configs/wine/dxvk.conf /etc/dxvk.conf 2>/dev/null || true
+cat /usr/share/fusionos/repo/configs/system/fusion-environment.conf >> /etc/environment 2>/dev/null || true
+
 cp /usr/share/fusionos/repo/configs/kde/yakuakerc $LIVE_HOME/.config/yakuakerc 2>/dev/null || true
 cp /usr/share/fusionos/repo/configs/kde/yakuakerc /etc/skel/.config/yakuakerc 2>/dev/null || true
 
